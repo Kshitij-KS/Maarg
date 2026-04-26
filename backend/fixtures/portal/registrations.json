@@ -1,0 +1,32 @@
+[
+  {
+    "registration_id": "demo-registration-f00002",
+    "submitted_at": "2026-04-26T06:30:00Z",
+    "facility_name": "Rural Surgical Centre",
+    "facility_type": "Private Hospital",
+    "official_phone": "+91 9876543210",
+    "official_email": "admin@rural-surgical.example",
+    "official_website": "https://rural-surgical.example",
+    "address_line1": "Near Main Road",
+    "address_line2": null,
+    "address_city": "Madhepura",
+    "address_state_or_region": "Bihar",
+    "address_zip_or_postcode": "852113",
+    "address_country": "India",
+    "contact_person_name": "Demo Facility Admin",
+    "contact_person_role": "Administrator",
+    "contact_person_phone": "+91 9876543210",
+    "contact_person_email": "portal-demo@maarg.test",
+    "proof_documents": [
+      "dbfs:/portal/proof_docs/demo-registration-f00002/facility-license.pdf"
+    ],
+    "matched_facility_id": "F00002",
+    "match_confidence": 0.91,
+    "status": "approved",
+    "reviewer_notes": "Pre-approved demo facility for the closed-loop proof flow.",
+    "reviewed_at": "2026-04-26T06:35:00Z",
+    "reviewed_by": "portal_admin",
+    "portal_user_id": "demo-user-f00002",
+    "portal_access_token_hash": "temporary-password-created"
+  }
+]

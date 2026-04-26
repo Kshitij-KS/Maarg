@@ -1,0 +1,3696 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Hacknation Reasoning Auditor API",
+    "description": "FastAPI service for Person B's v2 reasoning layer.",
+    "version": "0.0.2"
+  },
+  "paths": {
+    "/api/query": {
+      "post": {
+        "tags": [
+          "query"
+        ],
+        "summary": "Query",
+        "operationId": "query_api_query_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/facility/{facility_id}": {
+      "get": {
+        "tags": [
+          "facility"
+        ],
+        "summary": "Facility",
+        "operationId": "facility_api_facility__facility_id__get",
+        "parameters": [
+          {
+            "name": "facility_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Facility Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacilityTrustRecord"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/facility/{facility_id}/evidence": {
+      "get": {
+        "tags": [
+          "facility"
+        ],
+        "summary": "Evidence",
+        "operationId": "evidence_api_facility__facility_id__evidence_get",
+        "parameters": [
+          {
+            "name": "facility_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Facility Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacilityEvidenceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/desert": {
+      "get": {
+        "tags": [
+          "desert"
+        ],
+        "summary": "Desert",
+        "operationId": "desert_api_desert_get",
+        "parameters": [
+          {
+            "name": "capability",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Capability"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "State"
+            }
+          },
+          {
+            "name": "pin_code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Pin Code"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PinCodeDesert"
+                  },
+                  "title": "Response Desert Api Desert Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/desert/summary": {
+      "get": {
+        "tags": [
+          "desert"
+        ],
+        "summary": "Summary",
+        "operationId": "summary_api_desert_summary_get",
+        "parameters": [
+          {
+            "name": "capability",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Capability"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "State"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DesertSummary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/trace/{trace_id}": {
+      "get": {
+        "tags": [
+          "trace"
+        ],
+        "summary": "Trace",
+        "operationId": "trace_api_trace__trace_id__get",
+        "parameters": [
+          {
+            "name": "trace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Trace Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TraceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/trace/{trace_id}/timeline": {
+      "get": {
+        "tags": [
+          "trace"
+        ],
+        "summary": "Timeline",
+        "operationId": "timeline_api_trace__trace_id__timeline_get",
+        "parameters": [
+          {
+            "name": "trace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Trace Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TraceTimelineResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/demo-scenarios": {
+      "get": {
+        "tags": [
+          "demo"
+        ],
+        "summary": "Demo Scenarios",
+        "operationId": "demo_scenarios_api_demo_scenarios_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DemoScenariosResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/demo-moments": {
+      "get": {
+        "tags": [
+          "demo"
+        ],
+        "summary": "Demo Moments",
+        "operationId": "demo_moments_api_demo_moments_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DemoMomentsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/frontend-contract": {
+      "get": {
+        "tags": [
+          "contract"
+        ],
+        "summary": "Frontend Contract",
+        "operationId": "frontend_contract_api_frontend_contract_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FrontendContractResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portal/register": {
+      "post": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "Register",
+        "operationId": "register_portal_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationCreateResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portal/register/{registration_id}": {
+      "get": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "Registration Status",
+        "operationId": "registration_status_portal_register__registration_id__get",
+        "parameters": [
+          {
+            "name": "registration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Registration Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacilityRegistration"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portal/login": {
+      "post": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "Login",
+        "operationId": "login_portal_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portal/token/refresh": {
+      "post": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "Refresh Token",
+        "operationId": "refresh_token_portal_token_refresh_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/portal/admin/registrations": {
+      "get": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "List Registrations",
+        "operationId": "list_registrations_portal_admin_registrations_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FacilityRegistration"
+                  },
+                  "title": "Response List Registrations Portal Admin Registrations Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portal/admin/registrations/{registration_id}": {
+      "patch": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "Review Registration",
+        "operationId": "review_registration_portal_admin_registrations__registration_id__patch",
+        "parameters": [
+          {
+            "name": "registration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Registration Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationReviewRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacilityRegistration"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portal/facility/me": {
+      "get": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "Facility Me",
+        "operationId": "facility_me_portal_facility_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacilityDashboardResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/portal/facility/me/score": {
+      "get": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "Facility Score",
+        "operationId": "facility_score_portal_facility_me_score_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacilityDashboardResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/portal/updates": {
+      "get": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "List Update Requests",
+        "operationId": "list_update_requests_portal_updates_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/UpdateRequest"
+                  },
+                  "type": "array",
+                  "title": "Response List Update Requests Portal Updates Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "Create Update Request",
+        "operationId": "create_update_request_portal_updates_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRequestCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/portal/updates/{request_id}": {
+      "get": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "Get Update Request",
+        "operationId": "get_update_request_portal_updates__request_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portal/admin/updates": {
+      "get": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "List Admin Updates",
+        "operationId": "list_admin_updates_portal_admin_updates_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UpdateRequest"
+                  },
+                  "title": "Response List Admin Updates Portal Admin Updates Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portal/admin/updates/{request_id}": {
+      "patch": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "Review Update Request",
+        "operationId": "review_update_request_portal_admin_updates__request_id__patch",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Request Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReviewRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portal/proof/upload": {
+      "post": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "Upload Proof",
+        "operationId": "upload_proof_portal_proof_upload_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_proof_portal_proof_upload_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProofMedia"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/portal/proof/{media_id}": {
+      "get": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "Proof Metadata",
+        "operationId": "proof_metadata_portal_proof__media_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "media_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Media Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProofMedia"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portal/admin/proof": {
+      "get": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "List Proof Media",
+        "operationId": "list_proof_media_portal_admin_proof_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProofMedia"
+                  },
+                  "title": "Response List Proof Media Portal Admin Proof Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portal/admin/proof/{media_id}": {
+      "get": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "Admin Proof Metadata",
+        "operationId": "admin_proof_metadata_portal_admin_proof__media_id__get",
+        "parameters": [
+          {
+            "name": "media_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Media Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProofMedia"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portal/admin/proof/{media_id}/file": {
+      "get": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "Admin Proof File",
+        "operationId": "admin_proof_file_portal_admin_proof__media_id__file_get",
+        "parameters": [
+          {
+            "name": "media_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Media Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Admin Proof File Portal Admin Proof  Media Id  File Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/healthz": {
+      "get": {
+        "summary": "Healthz",
+        "operationId": "healthz_healthz_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Body_upload_proof_portal_proof_upload_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File"
+          },
+          "location_lat": {
+            "type": "number",
+            "title": "Location Lat"
+          },
+          "location_lon": {
+            "type": "number",
+            "title": "Location Lon"
+          },
+          "location_accuracy_m": {
+            "type": "number",
+            "title": "Location Accuracy M"
+          },
+          "location_captured_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Location Captured At"
+          },
+          "update_request_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Update Request Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file",
+          "location_lat",
+          "location_lon",
+          "location_accuracy_m",
+          "location_captured_at"
+        ],
+        "title": "Body_upload_proof_portal_proof_upload_post"
+      },
+      "CapabilityClaim": {
+        "properties": {
+          "capability": {
+            "type": "string",
+            "title": "Capability"
+          },
+          "claim_present": {
+            "type": "boolean",
+            "title": "Claim Present"
+          },
+          "self_consistency_score": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Self Consistency Score"
+          },
+          "coherence_score": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Coherence Score"
+          },
+          "peer_anomaly_score": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Peer Anomaly Score"
+          },
+          "trust_score": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Trust Score"
+          },
+          "confidence_interval_low": {
+            "type": "number",
+            "title": "Confidence Interval Low"
+          },
+          "confidence_interval_high": {
+            "type": "number",
+            "title": "Confidence Interval High"
+          },
+          "citations": {
+            "items": {
+              "$ref": "#/components/schemas/Citation"
+            },
+            "type": "array",
+            "title": "Citations"
+          },
+          "flags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Flags"
+          }
+        },
+        "type": "object",
+        "required": [
+          "capability",
+          "claim_present",
+          "self_consistency_score",
+          "coherence_score",
+          "peer_anomaly_score",
+          "trust_score",
+          "confidence_interval_low",
+          "confidence_interval_high",
+          "citations"
+        ],
+        "title": "CapabilityClaim",
+        "description": "One row per (facility, capability). The atomic unit of trust."
+      },
+      "CapabilityDashboardRow": {
+        "properties": {
+          "capability": {
+            "type": "string",
+            "title": "Capability"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "trust_score_percent": {
+            "type": "integer",
+            "title": "Trust Score Percent"
+          },
+          "claim_present": {
+            "type": "boolean",
+            "title": "Claim Present"
+          },
+          "status_label": {
+            "type": "string",
+            "title": "Status Label"
+          },
+          "explanation": {
+            "type": "string",
+            "title": "Explanation"
+          },
+          "citation_sentence": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Citation Sentence"
+          },
+          "flags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Flags"
+          },
+          "plain_english_flags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Plain English Flags"
+          }
+        },
+        "type": "object",
+        "required": [
+          "capability",
+          "label",
+          "trust_score_percent",
+          "claim_present",
+          "status_label",
+          "explanation"
+        ],
+        "title": "CapabilityDashboardRow"
+      },
+      "Citation": {
+        "properties": {
+          "source_field": {
+            "type": "string",
+            "title": "Source Field"
+          },
+          "sentence": {
+            "type": "string",
+            "title": "Sentence"
+          },
+          "char_start": {
+            "type": "integer",
+            "title": "Char Start"
+          },
+          "char_end": {
+            "type": "integer",
+            "title": "Char End"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source_field",
+          "sentence",
+          "char_start",
+          "char_end"
+        ],
+        "title": "Citation",
+        "description": "Exact provenance for any extracted fact."
+      },
+      "DemoMoment": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "endpoint": {
+            "type": "string",
+            "title": "Endpoint"
+          },
+          "request": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/QueryRequest"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "target_facility_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Facility Id"
+          },
+          "target_pin_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Pin Code"
+          },
+          "expected_flag": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Flag"
+          },
+          "success_criteria": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Success Criteria"
+          },
+          "design_notes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Design Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "endpoint",
+          "success_criteria",
+          "design_notes"
+        ],
+        "title": "DemoMoment"
+      },
+      "DemoMomentsResponse": {
+        "properties": {
+          "moments": {
+            "items": {
+              "$ref": "#/components/schemas/DemoMoment"
+            },
+            "type": "array",
+            "title": "Moments"
+          }
+        },
+        "type": "object",
+        "required": [
+          "moments"
+        ],
+        "title": "DemoMomentsResponse"
+      },
+      "DemoScenario": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "request": {
+            "$ref": "#/components/schemas/QueryRequest"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "description",
+          "request"
+        ],
+        "title": "DemoScenario"
+      },
+      "DemoScenariosResponse": {
+        "properties": {
+          "scenarios": {
+            "items": {
+              "$ref": "#/components/schemas/DemoScenario"
+            },
+            "type": "array",
+            "title": "Scenarios"
+          }
+        },
+        "type": "object",
+        "required": [
+          "scenarios"
+        ],
+        "title": "DemoScenariosResponse"
+      },
+      "DesertGroupSummary": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "row_count": {
+            "type": "integer",
+            "title": "Row Count"
+          },
+          "critical_pin_count": {
+            "type": "integer",
+            "title": "Critical Pin Count"
+          },
+          "population_at_risk": {
+            "type": "integer",
+            "title": "Population At Risk"
+          },
+          "average_desert_score": {
+            "type": "number",
+            "title": "Average Desert Score"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "row_count",
+          "critical_pin_count",
+          "population_at_risk",
+          "average_desert_score"
+        ],
+        "title": "DesertGroupSummary"
+      },
+      "DesertPinSummary": {
+        "properties": {
+          "pin_code": {
+            "type": "string",
+            "title": "Pin Code"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "district": {
+            "type": "string",
+            "title": "District"
+          },
+          "capability": {
+            "type": "string",
+            "title": "Capability"
+          },
+          "population": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Population"
+          },
+          "desert_score": {
+            "type": "number",
+            "title": "Desert Score"
+          },
+          "nearest_verified_facility_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nearest Verified Facility Id"
+          },
+          "distance_km": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance Km"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pin_code",
+          "state",
+          "district",
+          "capability",
+          "desert_score"
+        ],
+        "title": "DesertPinSummary"
+      },
+      "DesertSummary": {
+        "properties": {
+          "capability": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Capability"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State"
+          },
+          "total_rows": {
+            "type": "integer",
+            "title": "Total Rows"
+          },
+          "critical_pin_count": {
+            "type": "integer",
+            "title": "Critical Pin Count"
+          },
+          "population_at_risk": {
+            "type": "integer",
+            "title": "Population At Risk"
+          },
+          "average_desert_score": {
+            "type": "number",
+            "title": "Average Desert Score"
+          },
+          "top_deserts": {
+            "items": {
+              "$ref": "#/components/schemas/DesertPinSummary"
+            },
+            "type": "array",
+            "title": "Top Deserts"
+          },
+          "by_state": {
+            "items": {
+              "$ref": "#/components/schemas/DesertGroupSummary"
+            },
+            "type": "array",
+            "title": "By State"
+          },
+          "by_capability": {
+            "items": {
+              "$ref": "#/components/schemas/DesertGroupSummary"
+            },
+            "type": "array",
+            "title": "By Capability"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_rows",
+          "critical_pin_count",
+          "population_at_risk",
+          "average_desert_score",
+          "top_deserts",
+          "by_state",
+          "by_capability"
+        ],
+        "title": "DesertSummary"
+      },
+      "EndpointContract": {
+        "properties": {
+          "method": {
+            "type": "string",
+            "enum": [
+              "GET",
+              "POST"
+            ],
+            "title": "Method"
+          },
+          "path": {
+            "type": "string",
+            "title": "Path"
+          },
+          "purpose": {
+            "type": "string",
+            "title": "Purpose"
+          },
+          "response_model": {
+            "type": "string",
+            "title": "Response Model"
+          },
+          "notes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "method",
+          "path",
+          "purpose",
+          "response_model"
+        ],
+        "title": "EndpointContract"
+      },
+      "EvidenceSnippet": {
+        "properties": {
+          "facility_id": {
+            "type": "string",
+            "title": "Facility Id"
+          },
+          "capability": {
+            "type": "string",
+            "title": "Capability"
+          },
+          "source_field": {
+            "type": "string",
+            "title": "Source Field"
+          },
+          "sentence": {
+            "type": "string",
+            "title": "Sentence"
+          },
+          "char_start": {
+            "type": "integer",
+            "title": "Char Start"
+          },
+          "char_end": {
+            "type": "integer",
+            "title": "Char End"
+          },
+          "flags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Flags"
+          }
+        },
+        "type": "object",
+        "required": [
+          "facility_id",
+          "capability",
+          "source_field",
+          "sentence",
+          "char_start",
+          "char_end"
+        ],
+        "title": "EvidenceSnippet"
+      },
+      "FacilityDashboardResponse": {
+        "properties": {
+          "facility_id": {
+            "type": "string",
+            "title": "Facility Id"
+          },
+          "facility_name": {
+            "type": "string",
+            "title": "Facility Name"
+          },
+          "pin_code": {
+            "type": "string",
+            "title": "Pin Code"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "district": {
+            "type": "string",
+            "title": "District"
+          },
+          "facility_type": {
+            "type": "string",
+            "title": "Facility Type"
+          },
+          "last_updated": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Last Updated"
+          },
+          "trust_score_percent": {
+            "type": "integer",
+            "title": "Trust Score Percent"
+          },
+          "capabilities": {
+            "items": {
+              "$ref": "#/components/schemas/CapabilityDashboardRow"
+            },
+            "type": "array",
+            "title": "Capabilities"
+          },
+          "update_requests": {
+            "items": {
+              "$ref": "#/components/schemas/UpdateRequest"
+            },
+            "type": "array",
+            "title": "Update Requests"
+          },
+          "improvement_suggestions": {
+            "items": {
+              "$ref": "#/components/schemas/ImprovementSuggestion"
+            },
+            "type": "array",
+            "title": "Improvement Suggestions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "facility_id",
+          "facility_name",
+          "pin_code",
+          "state",
+          "district",
+          "facility_type",
+          "last_updated",
+          "trust_score_percent",
+          "capabilities"
+        ],
+        "title": "FacilityDashboardResponse"
+      },
+      "FacilityEvidenceResponse": {
+        "properties": {
+          "facility_id": {
+            "type": "string",
+            "title": "Facility Id"
+          },
+          "facility_name": {
+            "type": "string",
+            "title": "Facility Name"
+          },
+          "pin_code": {
+            "type": "string",
+            "title": "Pin Code"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "district": {
+            "type": "string",
+            "title": "District"
+          },
+          "facility_type": {
+            "type": "string",
+            "title": "Facility Type"
+          },
+          "overall_trust_score": {
+            "type": "number",
+            "title": "Overall Trust Score"
+          },
+          "has_flags": {
+            "type": "boolean",
+            "title": "Has Flags"
+          },
+          "flags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Flags"
+          },
+          "flag_summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Flag Summary"
+          },
+          "signals": {
+            "items": {
+              "$ref": "#/components/schemas/SignalBreakdown"
+            },
+            "type": "array",
+            "title": "Signals"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/EvidenceSnippet"
+            },
+            "type": "array",
+            "title": "Evidence"
+          },
+          "audit_summary": {
+            "type": "string",
+            "title": "Audit Summary"
+          }
+        },
+        "type": "object",
+        "required": [
+          "facility_id",
+          "facility_name",
+          "pin_code",
+          "state",
+          "district",
+          "facility_type",
+          "overall_trust_score",
+          "has_flags",
+          "flags",
+          "signals",
+          "evidence",
+          "audit_summary"
+        ],
+        "title": "FacilityEvidenceResponse"
+      },
+      "FacilityRegistration": {
+        "properties": {
+          "registration_id": {
+            "type": "string",
+            "title": "Registration Id"
+          },
+          "submitted_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Submitted At"
+          },
+          "facility_name": {
+            "type": "string",
+            "title": "Facility Name"
+          },
+          "facility_type": {
+            "type": "string",
+            "title": "Facility Type"
+          },
+          "official_phone": {
+            "type": "string",
+            "title": "Official Phone"
+          },
+          "official_email": {
+            "type": "string",
+            "title": "Official Email"
+          },
+          "official_website": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Official Website"
+          },
+          "address_line1": {
+            "type": "string",
+            "title": "Address Line1"
+          },
+          "address_line2": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address Line2"
+          },
+          "address_city": {
+            "type": "string",
+            "title": "Address City"
+          },
+          "address_state_or_region": {
+            "type": "string",
+            "title": "Address State Or Region"
+          },
+          "address_zip_or_postcode": {
+            "type": "string",
+            "title": "Address Zip Or Postcode"
+          },
+          "address_country": {
+            "type": "string",
+            "title": "Address Country",
+            "default": "India"
+          },
+          "contact_person_name": {
+            "type": "string",
+            "title": "Contact Person Name"
+          },
+          "contact_person_role": {
+            "type": "string",
+            "title": "Contact Person Role"
+          },
+          "contact_person_phone": {
+            "type": "string",
+            "title": "Contact Person Phone"
+          },
+          "contact_person_email": {
+            "type": "string",
+            "title": "Contact Person Email"
+          },
+          "proof_documents": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Proof Documents"
+          },
+          "matched_facility_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Matched Facility Id"
+          },
+          "match_confidence": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Match Confidence"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "under_review",
+              "approved",
+              "rejected",
+              "needs_more_info"
+            ],
+            "title": "Status",
+            "default": "pending"
+          },
+          "reviewer_notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewer Notes"
+          },
+          "reviewed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewed At"
+          },
+          "reviewed_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewed By"
+          },
+          "portal_user_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Portal User Id"
+          },
+          "portal_access_token_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Portal Access Token Hash"
+          }
+        },
+        "type": "object",
+        "required": [
+          "registration_id",
+          "submitted_at",
+          "facility_name",
+          "facility_type",
+          "official_phone",
+          "official_email",
+          "address_line1",
+          "address_city",
+          "address_state_or_region",
+          "address_zip_or_postcode",
+          "contact_person_name",
+          "contact_person_role",
+          "contact_person_phone",
+          "contact_person_email"
+        ],
+        "title": "FacilityRegistration",
+        "description": "A hospital or clinic's application to join the portal."
+      },
+      "FacilityTrustRecord": {
+        "properties": {
+          "facility_id": {
+            "type": "string",
+            "title": "Facility Id"
+          },
+          "facility_name": {
+            "type": "string",
+            "title": "Facility Name"
+          },
+          "pin_code": {
+            "type": "string",
+            "title": "Pin Code"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "district": {
+            "type": "string",
+            "title": "District"
+          },
+          "lat": {
+            "type": "number",
+            "title": "Lat"
+          },
+          "lon": {
+            "type": "number",
+            "title": "Lon"
+          },
+          "facility_type": {
+            "type": "string",
+            "title": "Facility Type"
+          },
+          "capabilities": {
+            "items": {
+              "$ref": "#/components/schemas/CapabilityClaim"
+            },
+            "type": "array",
+            "title": "Capabilities"
+          },
+          "overall_trust_score": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Overall Trust Score"
+          },
+          "extraction_run_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Extraction Run Ids"
+          },
+          "last_updated": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Last Updated"
+          }
+        },
+        "type": "object",
+        "required": [
+          "facility_id",
+          "facility_name",
+          "pin_code",
+          "state",
+          "district",
+          "lat",
+          "lon",
+          "facility_type",
+          "capabilities",
+          "overall_trust_score",
+          "extraction_run_ids",
+          "last_updated"
+        ],
+        "title": "FacilityTrustRecord",
+        "description": "One row per facility in `gold.facility_trust`."
+      },
+      "FrontendContractResponse": {
+        "properties": {
+          "product_name": {
+            "type": "string",
+            "title": "Product Name"
+          },
+          "frontend_owner": {
+            "type": "string",
+            "title": "Frontend Owner"
+          },
+          "backend_owner": {
+            "type": "string",
+            "title": "Backend Owner"
+          },
+          "constraints": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Constraints"
+          },
+          "endpoints": {
+            "items": {
+              "$ref": "#/components/schemas/EndpointContract"
+            },
+            "type": "array",
+            "title": "Endpoints"
+          },
+          "demo_sequence": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Demo Sequence"
+          },
+          "field_notes": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Field Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "product_name",
+          "frontend_owner",
+          "backend_owner",
+          "constraints",
+          "endpoints",
+          "demo_sequence",
+          "field_notes"
+        ],
+        "title": "FrontendContractResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "title": "Ok"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "mock",
+              "real"
+            ],
+            "title": "Mode"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ok",
+          "mode"
+        ],
+        "title": "HealthResponse"
+      },
+      "ImprovementSuggestion": {
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ],
+            "title": "Severity"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "field_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Field Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "severity",
+          "title",
+          "description"
+        ],
+        "title": "ImprovementSuggestion"
+      },
+      "LoginRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "LoginRequest"
+      },
+      "PinCodeDesert": {
+        "properties": {
+          "pin_code": {
+            "type": "string",
+            "title": "Pin Code"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "district": {
+            "type": "string",
+            "title": "District"
+          },
+          "lat": {
+            "type": "number",
+            "title": "Lat"
+          },
+          "lon": {
+            "type": "number",
+            "title": "Lon"
+          },
+          "population": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Population"
+          },
+          "capability": {
+            "type": "string",
+            "title": "Capability"
+          },
+          "nearest_verified_facility_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nearest Verified Facility Id"
+          },
+          "distance_km": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance Km"
+          },
+          "desert_score": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Desert Score"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pin_code",
+          "state",
+          "district",
+          "lat",
+          "lon",
+          "capability",
+          "desert_score"
+        ],
+        "title": "PinCodeDesert",
+        "description": "One row per (pin_code, capability) in `gold.pin_code_desert`."
+      },
+      "ProofMedia": {
+        "properties": {
+          "media_id": {
+            "type": "string",
+            "title": "Media Id"
+          },
+          "update_request_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Update Request Id"
+          },
+          "facility_id": {
+            "type": "string",
+            "title": "Facility Id"
+          },
+          "uploaded_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Uploaded At"
+          },
+          "storage_path": {
+            "type": "string",
+            "title": "Storage Path"
+          },
+          "original_filename": {
+            "type": "string",
+            "title": "Original Filename"
+          },
+          "mime_type": {
+            "type": "string",
+            "title": "Mime Type"
+          },
+          "file_size_bytes": {
+            "type": "integer",
+            "title": "File Size Bytes"
+          },
+          "location_lat": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location Lat"
+          },
+          "location_lon": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location Lon"
+          },
+          "location_accuracy_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location Accuracy M"
+          },
+          "location_captured_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location Captured At"
+          },
+          "exif_datetime": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exif Datetime"
+          },
+          "exif_gps_lat": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exif Gps Lat"
+          },
+          "exif_gps_lon": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exif Gps Lon"
+          },
+          "exif_device_model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exif Device Model"
+          },
+          "location_discrepancy_detected": {
+            "type": "boolean",
+            "title": "Location Discrepancy Detected",
+            "default": false
+          },
+          "timestamp_discrepancy_detected": {
+            "type": "boolean",
+            "title": "Timestamp Discrepancy Detected",
+            "default": false
+          },
+          "location_verified": {
+            "type": "boolean",
+            "title": "Location Verified",
+            "default": false
+          },
+          "content_verified": {
+            "type": "boolean",
+            "title": "Content Verified",
+            "default": false
+          },
+          "reviewer_notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewer Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "media_id",
+          "facility_id",
+          "uploaded_at",
+          "storage_path",
+          "original_filename",
+          "mime_type",
+          "file_size_bytes"
+        ],
+        "title": "ProofMedia",
+        "description": "A photo or document uploaded as proof for an update request."
+      },
+      "QueryRequest": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "user_lat": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Lat"
+          },
+          "user_lon": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Lon"
+          },
+          "max_distance_km": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Distance Km"
+          },
+          "min_trust_score": {
+            "type": "number",
+            "title": "Min Trust Score",
+            "default": 0.5
+          },
+          "capabilities_filter": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Capabilities Filter"
+          },
+          "top_k": {
+            "type": "integer",
+            "title": "Top K",
+            "default": 10
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "QueryRequest",
+        "description": "User query into the Coordinator agent."
+      },
+      "QueryResponse": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query"
+          },
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/FacilityTrustRecord"
+            },
+            "type": "array",
+            "title": "Candidates"
+          },
+          "citations_per_candidate": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/Citation"
+              },
+              "type": "array"
+            },
+            "type": "object",
+            "title": "Citations Per Candidate"
+          },
+          "critic_verdict": {
+            "type": "string",
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported"
+            ],
+            "title": "Critic Verdict"
+          },
+          "critic_reasoning": {
+            "type": "string",
+            "title": "Critic Reasoning"
+          },
+          "trace_id": {
+            "type": "string",
+            "title": "Trace Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query",
+          "candidates",
+          "citations_per_candidate",
+          "critic_verdict",
+          "critic_reasoning",
+          "trace_id"
+        ],
+        "title": "QueryResponse",
+        "description": "The thing the (eventual) frontend renders."
+      },
+      "RegistrationCreate": {
+        "properties": {
+          "facility_name": {
+            "type": "string",
+            "title": "Facility Name"
+          },
+          "facility_type": {
+            "type": "string",
+            "title": "Facility Type"
+          },
+          "official_phone": {
+            "type": "string",
+            "title": "Official Phone"
+          },
+          "official_email": {
+            "type": "string",
+            "title": "Official Email"
+          },
+          "official_website": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Official Website"
+          },
+          "address_line1": {
+            "type": "string",
+            "title": "Address Line1"
+          },
+          "address_line2": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address Line2"
+          },
+          "address_city": {
+            "type": "string",
+            "title": "Address City"
+          },
+          "address_state_or_region": {
+            "type": "string",
+            "title": "Address State Or Region"
+          },
+          "address_zip_or_postcode": {
+            "type": "string",
+            "title": "Address Zip Or Postcode"
+          },
+          "contact_person_name": {
+            "type": "string",
+            "title": "Contact Person Name"
+          },
+          "contact_person_role": {
+            "type": "string",
+            "title": "Contact Person Role"
+          },
+          "contact_person_phone": {
+            "type": "string",
+            "title": "Contact Person Phone"
+          },
+          "contact_person_email": {
+            "type": "string",
+            "title": "Contact Person Email"
+          },
+          "proof_documents": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Proof Documents"
+          },
+          "declaration_confirmed": {
+            "type": "boolean",
+            "title": "Declaration Confirmed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "facility_name",
+          "facility_type",
+          "official_phone",
+          "official_email",
+          "address_line1",
+          "address_city",
+          "address_state_or_region",
+          "address_zip_or_postcode",
+          "contact_person_name",
+          "contact_person_role",
+          "contact_person_phone",
+          "contact_person_email",
+          "declaration_confirmed"
+        ],
+        "title": "RegistrationCreate"
+      },
+      "RegistrationCreateResponse": {
+        "properties": {
+          "registration_id": {
+            "type": "string",
+            "title": "Registration Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "under_review",
+              "approved",
+              "rejected",
+              "needs_more_info"
+            ],
+            "title": "Status"
+          },
+          "matched_facility_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Matched Facility Id"
+          },
+          "match_confidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Match Confidence"
+          }
+        },
+        "type": "object",
+        "required": [
+          "registration_id",
+          "status"
+        ],
+        "title": "RegistrationCreateResponse"
+      },
+      "RegistrationReviewRequest": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "approved",
+              "rejected",
+              "needs_more_info",
+              "under_review"
+            ],
+            "title": "Status"
+          },
+          "matched_facility_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Matched Facility Id"
+          },
+          "reviewer_notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewer Notes"
+          },
+          "temporary_password": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Temporary Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "RegistrationReviewRequest"
+      },
+      "SignalBreakdown": {
+        "properties": {
+          "capability": {
+            "type": "string",
+            "title": "Capability"
+          },
+          "claim_present": {
+            "type": "boolean",
+            "title": "Claim Present"
+          },
+          "self_consistency_score": {
+            "type": "number",
+            "title": "Self Consistency Score"
+          },
+          "coherence_score": {
+            "type": "number",
+            "title": "Coherence Score"
+          },
+          "peer_anomaly_score": {
+            "type": "number",
+            "title": "Peer Anomaly Score"
+          },
+          "trust_score": {
+            "type": "number",
+            "title": "Trust Score"
+          },
+          "confidence_interval_low": {
+            "type": "number",
+            "title": "Confidence Interval Low"
+          },
+          "confidence_interval_high": {
+            "type": "number",
+            "title": "Confidence Interval High"
+          },
+          "confidence_interval_width": {
+            "type": "number",
+            "title": "Confidence Interval Width"
+          },
+          "flags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Flags"
+          },
+          "citation_count": {
+            "type": "integer",
+            "title": "Citation Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "capability",
+          "claim_present",
+          "self_consistency_score",
+          "coherence_score",
+          "peer_anomaly_score",
+          "trust_score",
+          "confidence_interval_low",
+          "confidence_interval_high",
+          "confidence_interval_width",
+          "citation_count"
+        ],
+        "title": "SignalBreakdown"
+      },
+      "TokenResponse": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "token_type": {
+            "type": "string",
+            "title": "Token Type",
+            "default": "bearer"
+          },
+          "expires_in_seconds": {
+            "type": "integer",
+            "title": "Expires In Seconds"
+          },
+          "facility_id": {
+            "type": "string",
+            "title": "Facility Id"
+          },
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "facility_admin",
+              "facility_viewer"
+            ],
+            "title": "Role"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_token",
+          "expires_in_seconds",
+          "facility_id",
+          "user_id",
+          "role"
+        ],
+        "title": "TokenResponse"
+      },
+      "TraceResponse": {
+        "properties": {
+          "trace_id": {
+            "type": "string",
+            "title": "Trace Id"
+          },
+          "found": {
+            "type": "boolean",
+            "title": "Found"
+          },
+          "spans": {
+            "items": {
+              "$ref": "#/components/schemas/TraceSpan"
+            },
+            "type": "array",
+            "title": "Spans"
+          }
+        },
+        "type": "object",
+        "required": [
+          "trace_id",
+          "found",
+          "spans"
+        ],
+        "title": "TraceResponse"
+      },
+      "TraceSpan": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "span_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Span Type"
+          },
+          "start_time_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Time Ms"
+          },
+          "end_time_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Time Ms"
+          },
+          "attributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Attributes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "TraceSpan"
+      },
+      "TraceTimelineNode": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "agent": {
+            "type": "string",
+            "title": "Agent"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "supported",
+              "partial",
+              "unsupported",
+              "complete",
+              "unknown"
+            ],
+            "title": "Status"
+          },
+          "latency_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latency Ms"
+          },
+          "token_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Token Count"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "attributes": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Attributes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "agent",
+          "label",
+          "status",
+          "summary"
+        ],
+        "title": "TraceTimelineNode"
+      },
+      "TraceTimelineResponse": {
+        "properties": {
+          "trace_id": {
+            "type": "string",
+            "title": "Trace Id"
+          },
+          "found": {
+            "type": "boolean",
+            "title": "Found"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/TraceTimelineNode"
+            },
+            "type": "array",
+            "title": "Nodes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "trace_id",
+          "found",
+          "nodes"
+        ],
+        "title": "TraceTimelineResponse"
+      },
+      "UpdateRequest": {
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "title": "Request Id"
+          },
+          "facility_id": {
+            "type": "string",
+            "title": "Facility Id"
+          },
+          "portal_user_id": {
+            "type": "string",
+            "title": "Portal User Id"
+          },
+          "submitted_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Submitted At"
+          },
+          "field_name": {
+            "type": "string",
+            "title": "Field Name"
+          },
+          "field_category": {
+            "type": "string",
+            "enum": [
+              "contact",
+              "address",
+              "profile",
+              "operational",
+              "clinical",
+              "equipment",
+              "capability"
+            ],
+            "title": "Field Category"
+          },
+          "old_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Old Value"
+          },
+          "new_value": {
+            "type": "string",
+            "title": "New Value"
+          },
+          "justification": {
+            "type": "string",
+            "title": "Justification"
+          },
+          "requires_proof": {
+            "type": "boolean",
+            "title": "Requires Proof"
+          },
+          "proof_media_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Proof Media Ids"
+          },
+          "location_verified": {
+            "type": "boolean",
+            "title": "Location Verified",
+            "default": false
+          },
+          "proof_location_lat": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proof Location Lat"
+          },
+          "proof_location_lon": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proof Location Lon"
+          },
+          "proof_location_accuracy_m": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proof Location Accuracy M"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "under_review",
+              "approved",
+              "rejected",
+              "needs_more_info"
+            ],
+            "title": "Status",
+            "default": "pending"
+          },
+          "reviewer_notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewer Notes"
+          },
+          "reviewed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewed At"
+          },
+          "reviewed_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewed By"
+          },
+          "applied_to_pipeline": {
+            "type": "boolean",
+            "title": "Applied To Pipeline",
+            "default": false
+          },
+          "applied_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Applied At"
+          },
+          "resulting_extraction_run_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resulting Extraction Run Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "request_id",
+          "facility_id",
+          "portal_user_id",
+          "submitted_at",
+          "field_name",
+          "field_category",
+          "new_value",
+          "justification",
+          "requires_proof"
+        ],
+        "title": "UpdateRequest",
+        "description": "A verified facility's request to update one field in their record."
+      },
+      "UpdateRequestCreate": {
+        "properties": {
+          "field_name": {
+            "type": "string",
+            "title": "Field Name"
+          },
+          "new_value": {
+            "title": "New Value"
+          },
+          "justification": {
+            "type": "string",
+            "minLength": 5,
+            "title": "Justification"
+          },
+          "proof_media_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Proof Media Ids"
+          },
+          "old_value": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Old Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "field_name",
+          "new_value",
+          "justification"
+        ],
+        "title": "UpdateRequestCreate"
+      },
+      "UpdateReviewRequest": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "approved",
+              "rejected",
+              "needs_more_info",
+              "under_review"
+            ],
+            "title": "Status"
+          },
+          "reviewer_notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewer Notes"
+          },
+          "proof_verified": {
+            "type": "boolean",
+            "title": "Proof Verified",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "UpdateReviewRequest"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

@@ -3,14 +3,48 @@
 *.xls
 *.csv
 
-# Python/local tooling
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+build/
+dist/
 .pytest_cache/
-.ruff_cache/
 .mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual envs
 .venv/
 venv/
+env/
 
-# OS/editor noise
+# Editor / OS
+.idea/
+.vscode/
+.claude/settings.local.json
 .DS_Store
 Thumbs.db
+
+# Local secrets
+.env
+.env.local
+
+# MLflow local store
+mlruns/
+mlartifacts/
+backend/mlruns/
+backend/mlartifacts/
+
+# Demo runner output (committed selectively)
+backend/outputs/*.json
+!backend/outputs/hour8_smoke.json
+!backend/outputs/.gitkeep
+
+# Generated / fallback fixtures
+backend/fixtures/seed_*.json

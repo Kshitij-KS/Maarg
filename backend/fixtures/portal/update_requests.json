@@ -1,0 +1,28 @@
+[
+  {
+    "request_id": "demo-update-equipment-f00002",
+    "facility_id": "F00002",
+    "portal_user_id": "demo-user-f00002",
+    "submitted_at": "2026-04-26T06:46:00Z",
+    "field_name": "equipment",
+    "field_category": "equipment",
+    "old_value": "[\"operating theatre\"]",
+    "new_value": "[\"operating theatre\", \"anesthesia machine\"]",
+    "justification": "The facility purchased an anesthesia machine last month for surgical support.",
+    "requires_proof": true,
+    "proof_media_ids": [
+      "demo-proof-anesthesia-machine"
+    ],
+    "location_verified": true,
+    "proof_location_lat": 25.931,
+    "proof_location_lon": 86.801,
+    "proof_location_accuracy_m": 18.0,
+    "status": "approved",
+    "reviewer_notes": "Approved demo correction with verified location-tagged proof.",
+    "reviewed_at": "2026-04-26T06:50:00Z",
+    "reviewed_by": "portal_admin",
+    "applied_to_pipeline": false,
+    "applied_at": null,
+    "resulting_extraction_run_id": null
+  }
+]

@@ -1,0 +1,25 @@
+[
+  {
+    "media_id": "demo-proof-anesthesia-machine",
+    "update_request_id": "demo-update-equipment-f00002",
+    "facility_id": "F00002",
+    "uploaded_at": "2026-04-26T06:45:00Z",
+    "storage_path": "dbfs:/portal/proof_photos/F00002/demo-proof-anesthesia-machine.jpg",
+    "original_filename": "anesthesia-machine.jpg",
+    "mime_type": "image/jpeg",
+    "file_size_bytes": 183420,
+    "location_lat": 25.931,
+    "location_lon": 86.801,
+    "location_accuracy_m": 18.0,
+    "location_captured_at": "2026-04-26T06:44:30Z",
+    "exif_datetime": null,
+    "exif_gps_lat": null,
+    "exif_gps_lon": null,
+    "exif_device_model": null,
+    "location_discrepancy_detected": false,
+    "timestamp_discrepancy_detected": false,
+    "location_verified": true,
+    "content_verified": true,
+    "reviewer_notes": "Demo proof: location and equipment content verified."
+  }
+]

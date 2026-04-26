@@ -4,15 +4,16 @@ import { animate } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Activity, ArrowRight, CheckCircle2, Database, MapPinned, ShieldCheck } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 import { LandingBackground } from "@/components/landing-background";
+import { PartnerEcosystemCta, PartnerEcosystemTeaser } from "@/components/partner-ecosystem";
 import { QueryBar } from "@/components/query-bar";
 import { Badge } from "@/components/ui/badge";
 import { getDemoMoments } from "@/lib/api";
 import { FALLBACK_DEMO_MOMENTS } from "@/lib/demo-moments-fallback";
-import { EASE, fadeInUp, hoverLift, stagger } from "@/lib/motion";
+import { EASE, fadeInUp, stagger } from "@/lib/motion";
 import { useFiltersStore } from "@/lib/stores/use-filters-store";
 import type { DemoMoment } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -20,7 +21,8 @@ import { cn } from "@/lib/utils";
 const FACILITY_COUNT = 10247;
 const LAST_UPDATED = "14:32 IST";
 
-type MetricDef = {
+type MetricAnimated = {
+  kind: "animated";
   label: string;
   numeric: number;
   suffix: string;
@@ -28,13 +30,26 @@ type MetricDef = {
   icon: typeof Activity;
 };
 
-const METRICS: MetricDef[] = [
-  { label: "Facilities indexed", numeric: 10247, suffix: "", decimals: 0, icon: Activity },
-  { label: "People covered", numeric: 1.4, suffix: "B", decimals: 1, icon: MapPinned },
-  { label: "Claims audited", numeric: 48, suffix: "K+", decimals: 0, icon: ShieldCheck },
+type MetricProse = {
+  kind: "prose";
+  /** Short display line — no synthetic numeric stats. */
+  headline: string;
+  label: string;
+  icon: typeof Activity;
+};
+
+const METRICS: (MetricAnimated | MetricProse)[] = [
+  { kind: "animated", label: "Facilities indexed", numeric: 10247, suffix: "", decimals: 0, icon: Activity },
+  { kind: "animated", label: "People covered", numeric: 1.4, suffix: "B", decimals: 1, icon: MapPinned },
+  {
+    kind: "prose",
+    headline: "Citation-backed",
+    label: "Every trust score links to a source field. We do not show unaudited claim totals.",
+    icon: ShieldCheck,
+  },
 ];
 
-function MetricCard({ label, numeric, suffix, decimals, icon: Icon }: MetricDef) {
+function MetricCardAnimated({ label, numeric, suffix, decimals, icon: Icon }: Omit<MetricAnimated, "kind">) {
   const spanRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -59,7 +74,7 @@ function MetricCard({ label, numeric, suffix, decimals, icon: Icon }: MetricDef)
       : numeric.toLocaleString("en-IN") + suffix;
 
   return (
-    <div className="editorial-panel rounded-2xl p-4 transition-transform duration-300 hover:-translate-y-0.5">
+    <div className="editorial-panel rounded-2xl p-4">
       <Icon className="mb-4 text-trust-500/80" size={18} aria-hidden />
       <p className="text-numeric-lg text-text-primary">
         <span ref={spanRef}>{initial}</span>
@@ -69,10 +84,34 @@ function MetricCard({ label, numeric, suffix, decimals, icon: Icon }: MetricDef)
   );
 }
 
+function MetricCardProse({ headline, label, icon: Icon }: Omit<MetricProse, "kind">) {
+  return (
+    <div className="editorial-panel rounded-2xl p-4">
+      <Icon className="mb-4 text-trust-500/80" size={18} aria-hidden />
+      <p className="text-numeric-lg text-balance text-text-primary">{headline}</p>
+      <p className="mt-1 text-pretty text-small leading-snug text-text-muted">{label}</p>
+    </div>
+  );
+}
+
 export default function Home() {
   const router = useRouter();
+  const pathname = usePathname();
   const hydrate = useFiltersStore((s) => s.hydrateFromScenario);
   const applyNow = useFiltersStore((s) => s.applyNow);
+
+  // Next client navigation to /#partner-ecosystem does not always scroll; fix in-app.
+  useEffect(() => {
+    if (pathname !== "/") return;
+    if (window.location.hash !== "#partner-ecosystem") return;
+    const t = window.setTimeout(() => {
+      document.getElementById("partner-ecosystem")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 50);
+    return () => clearTimeout(t);
+  }, [pathname]);
 
   const { data, isError } = useQuery({
     queryKey: ["demo-moments"],
@@ -101,14 +140,14 @@ export default function Home() {
   };
 
   return (
-    <main className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 py-10">
+    <main className="relative z-0 mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 py-10">
       <LandingBackground />
 
       <motion.div
         variants={stagger(0.07)}
-        initial="hidden"
+        initial={false}
         animate="visible"
-        className="relative grid min-h-[calc(100vh-8rem)] items-center gap-12 lg:grid-cols-[minmax(0,1fr)_424px]"
+        className="relative z-10 grid min-h-[calc(100vh-8rem)] items-center gap-12 lg:grid-cols-[minmax(0,1fr)_424px]"
       >
         <section className="flex flex-col items-start gap-8 text-left">
           <motion.div variants={fadeInUp} className="flex flex-wrap items-center gap-3">
@@ -139,10 +178,11 @@ export default function Home() {
               contradiction detection — because when finding the path saves a
               life, you can&rsquo;t afford to guess.
             </p>
+            <PartnerEcosystemTeaser />
           </motion.div>
 
           <motion.div variants={fadeInUp} className="w-full max-w-2xl">
-            <QueryBar className="premium-ring" />
+            <QueryBar />
           </motion.div>
 
           <motion.div
@@ -150,11 +190,22 @@ export default function Home() {
             data-demo="true"
             className="w-full max-w-2xl space-y-2"
           >
-            <p className="text-eyebrow text-text-muted">Illustrative · pitch-day figures</p>
+            <p className="text-eyebrow text-text-muted">Illustrative scale · the third card is not a number by design</p>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              {METRICS.map((metric) => (
-                <MetricCard key={metric.label} {...metric} />
-              ))}
+              {METRICS.map((metric) =>
+                metric.kind === "animated" ? (
+                  <MetricCardAnimated
+                    key={metric.label}
+                    label={metric.label}
+                    numeric={metric.numeric}
+                    suffix={metric.suffix}
+                    decimals={metric.decimals}
+                    icon={metric.icon}
+                  />
+                ) : (
+                  <MetricCardProse key={metric.headline} label={metric.label} headline={metric.headline} icon={metric.icon} />
+                ),
+              )}
             </div>
           </motion.div>
 
@@ -180,13 +231,9 @@ export default function Home() {
                 <p className="text-eyebrow text-text-muted">Demo cockpit</p>
                 <h2 className="mt-1 text-h2 text-text-primary">Run the pitch</h2>
               </div>
-              <motion.span
-                animate={{ opacity: [0.7, 1, 0.7] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                className="rounded-full border border-success-500/15 bg-success-500/10 px-3 py-1 text-small text-success-500"
-              >
+              <span className="rounded-full border border-success-500/20 bg-success-500/10 px-3 py-1 text-small text-success-600 dark:text-success-500">
                 Live API
-              </motion.span>
+              </span>
             </div>
 
             <div className="space-y-3">
@@ -196,17 +243,14 @@ export default function Home() {
                 </div>
               ) : null}
               {moments.map((moment, index) => (
-                <motion.button
+                <button
                   key={moment.id}
                   type="button"
                   onClick={() => launchMoment(moment)}
-                  variants={hoverLift}
-                  initial="rest"
-                  whileHover="hover"
-                  whileTap="tap"
                   className={cn(
-                    "group relative w-full overflow-hidden rounded-2xl border border-border-default bg-surface-raised/58 p-4 text-left shadow-card transition-all duration-300",
-                    "hover:-translate-y-0.5 hover:border-trust-400/35 hover:bg-surface-raised hover:shadow-popover",
+                    "group relative w-full overflow-hidden rounded-2xl border border-border-default bg-surface-raised/58 p-4 text-left shadow-sm transition-all duration-200",
+                    "hover:border-trust-400/30 hover:bg-surface-raised/90 hover:shadow-md",
+                    "active:scale-[0.99]",
                   )}
                 >
                   <span className="absolute inset-y-3 left-0 w-px bg-gradient-to-b from-transparent via-trust-500/70 to-transparent" />
@@ -243,12 +287,16 @@ export default function Home() {
                       className="mt-1 shrink-0 text-text-muted transition-transform group-hover:translate-x-1 group-hover:text-trust-400"
                     />
                   </div>
-                </motion.button>
+                </button>
               ))}
             </div>
           </div>
         </motion.aside>
       </motion.div>
+
+      <div className="relative mx-auto mt-16 w-full max-w-5xl">
+        <PartnerEcosystemCta />
+      </div>
     </main>
   );
 }

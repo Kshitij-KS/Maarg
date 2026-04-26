@@ -7,7 +7,6 @@ dependencies = [
     "pydantic>=2.7",
     "mlflow>=3.0",
     "databricks-sdk",
-    "databricks-sql-connector",
     "fastapi",
     "uvicorn[standard]",
     "python-dotenv",
@@ -28,6 +27,10 @@ dev = [
     "pytest-cov",
     "ruff",
     "mypy",
+]
+# Optional: server-side access to your Supabase project (REST/RPC). Do not add service role to the frontend.
+supabase = [
+    "supabase>=2.0",
 ]
 
 # Frontend deps live in ../frontend/package.json.

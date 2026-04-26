@@ -174,9 +174,12 @@ export async function submitRegistration(payload: RegistrationPayload) {
     headers: { "content-type": "application/json" },
     body: JSON.stringify(payload),
   });
-  return parseJson<{ registration_id: string; status: string; matched_facility_id?: string | null }>(
-    response,
-  );
+  return parseJson<{
+    registration_id: string;
+    status: string;
+    matched_facility_id?: string | null;
+    match_confidence?: number | null;
+  }>(response);
 }
 
 export async function getRegistration(registrationId: string) {

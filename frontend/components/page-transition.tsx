@@ -19,10 +19,11 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
       <motion.div
         key={pathname}
         variants={variants}
-        initial="hidden"
+        /* Skip initial "hidden" on mount — avoids a blank / stuck first paint (Next 15 + Framer). */
+        initial={false}
         animate="visible"
         exit="exit"
-        className="flex flex-1 flex-col"
+        className="flex min-h-0 w-full min-w-0 flex-1 flex-col"
       >
         {children}
       </motion.div>

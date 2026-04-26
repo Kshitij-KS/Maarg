@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import { Nav } from "@/components/nav";
 import { PageTransition } from "@/components/page-transition";
 import { QueryProvider } from "@/components/query-provider";
+import { SupabaseProvider } from "@/components/supabase-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
@@ -23,26 +24,30 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${GeistSans.variable} ${GeistMono.variable} h-full antialiased`}
+      className={`${GeistSans.variable} ${GeistMono.variable} h-full scroll-smooth antialiased`}
     >
-      <body className="flex min-h-full flex-col">
+      <body className="flex min-h-screen min-w-0 flex-col font-sans antialiased">
         <QueryProvider>
-          <TooltipProvider>
-            <Nav />
-            <PageTransition>{children}</PageTransition>
-            <Toaster
-              theme="system"
-              position="top-right"
-              richColors
-              closeButton
-              toastOptions={{
-                style: {
-                  fontFamily: "var(--font-sans)",
-                  borderRadius: "14px",
-                },
-              }}
-            />
-          </TooltipProvider>
+          <SupabaseProvider>
+            <TooltipProvider>
+              <Nav />
+              <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+                <PageTransition>{children}</PageTransition>
+              </div>
+              <Toaster
+                theme="system"
+                position="top-right"
+                richColors
+                closeButton
+                toastOptions={{
+                  style: {
+                    fontFamily: "var(--font-sans)",
+                    borderRadius: "14px",
+                  },
+                }}
+              />
+            </TooltipProvider>
+          </SupabaseProvider>
         </QueryProvider>
       </body>
     </html>

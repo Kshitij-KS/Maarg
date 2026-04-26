@@ -1,8 +1,9 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, Suspense, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 import { CameraCapture } from "@/components/portal/camera-capture";
 import { Button } from "@/components/ui/button";
@@ -11,7 +12,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { getUpdateFields, submitUpdate, type ProofMedia } from "@/lib/portal-client";
 
-export default function NewUpdateRequestPage() {
+function NewUpdateRequestForm() {
+  const searchParams = useSearchParams();
+  const paramField = searchParams.get("field");
   const [fieldName, setFieldName] = useState("equipment");
   const [oldValue, setOldValue] = useState("");
   const [newValue, setNewValue] = useState("");
@@ -23,6 +26,16 @@ export default function NewUpdateRequestPage() {
   const fields = useQuery({ queryKey: ["portal-update-fields"], queryFn: getUpdateFields });
   const selectedField = fields.data?.find((field) => field.field_name === fieldName);
   const requiresProof = Boolean(selectedField?.requires_proof);
+
+  useEffect(() => {
+    if (!fields.data?.length || !paramField) return;
+    const match = fields.data.find((f) => f.field_name === paramField);
+    if (match) {
+      setFieldName(paramField);
+      setProof([]);
+      setResult(null);
+    }
+  }, [paramField, fields.data]);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -129,5 +142,20 @@ export default function NewUpdateRequestPage() {
         </CardContent>
       </Card>
     </main>
+  );
+}
+
+export default function NewUpdateRequestPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-6 py-10">
+          <h1 className="text-4xl font-semibold text-text-primary">Request a correction</h1>
+          <p className="text-text-secondary">Loading form…</p>
+        </main>
+      }
+    >
+      <NewUpdateRequestForm />
+    </Suspense>
   );
 }

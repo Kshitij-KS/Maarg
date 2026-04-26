@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.adapters.gold_reader import mode
-from app.api.routes import contract, demo, desert, facility, query, trace
+from app.api.routes import contract, demo, desert, facility, map, query, trace
 from app.api.schemas import HealthResponse
 from app.api.settings import get_settings
 from app.portal.api.router import portal_router
@@ -31,6 +31,7 @@ app.add_middleware(
 app.include_router(query.router)
 app.include_router(facility.router)
 app.include_router(desert.router)
+app.include_router(map.router)
 app.include_router(trace.router)
 app.include_router(demo.router)
 app.include_router(contract.router)

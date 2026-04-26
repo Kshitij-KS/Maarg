@@ -7,6 +7,7 @@ Hour 28+ swaps to Unity Catalog by setting `HACKATHON_MODE=real`.
 from __future__ import annotations
 
 import json
+import logging
 import os
 from pathlib import Path
 from typing import Any, TypeVar
@@ -14,6 +15,11 @@ from typing import Any, TypeVar
 from pydantic import BaseModel
 
 from app.shared.schemas import FacilityTrustRecord, PinCodeDesert
+from app.shared.databricks_catalog import (
+    DatabricksGoldCatalog,
+    validate_desert_rows,
+    validate_facility_rows,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 FIXTURES_DIR = PROJECT_ROOT / "fixtures"
@@ -21,6 +27,7 @@ MOCK_FACILITY_TRUST_PATH = FIXTURES_DIR / "mock_gold_facility_trust.json"
 MOCK_PIN_DESERT_PATH = FIXTURES_DIR / "mock_gold_pin_desert.json"
 
 T = TypeVar("T", bound=BaseModel)
+LOGGER = logging.getLogger(__name__)
 
 
 def use_mock_gold() -> bool:
@@ -54,10 +61,11 @@ def load_facility_trust() -> list[FacilityTrustRecord]:
 
     if use_mock_gold():
         return _load_json_records(MOCK_FACILITY_TRUST_PATH, FacilityTrustRecord)
-    raise NotImplementedError(
-        "HACKATHON_MODE=real is reserved for Hour 28+. "
-        "Wire Databricks SQL reads from main.gold.facility_trust here."
-    )
+    try:
+        return validate_facility_rows(DatabricksGoldCatalog().load_facility_trust())
+    except Exception as exc:
+        LOGGER.warning("Databricks facility Gold load failed; falling back to mock: %s", exc)
+        return _load_json_records(MOCK_FACILITY_TRUST_PATH, FacilityTrustRecord)
 
 
 def load_pin_desert() -> list[PinCodeDesert]:
@@ -65,7 +73,8 @@ def load_pin_desert() -> list[PinCodeDesert]:
 
     if use_mock_gold():
         return _load_json_records(MOCK_PIN_DESERT_PATH, PinCodeDesert)
-    raise NotImplementedError(
-        "HACKATHON_MODE=real is reserved for Hour 28+. "
-        "Wire Databricks SQL reads from main.gold.pin_code_desert here."
-    )
+    try:
+        return validate_desert_rows(DatabricksGoldCatalog().load_pin_desert())
+    except Exception as exc:
+        LOGGER.warning("Databricks desert Gold load failed; falling back to mock: %s", exc)
+        return _load_json_records(MOCK_PIN_DESERT_PATH, PinCodeDesert)

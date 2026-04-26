@@ -45,6 +45,17 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+For the hackathon demo, deploy the frontend on Vercel and point it at the
+deployed FastAPI backend:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=https://your-backend-url
+NEXT_PUBLIC_MAPBOX_TOKEN=your-mapbox-public-token
+```
+
+The backend can run in `HACKATHON_MODE=real` against Databricks Gold tables or
+fall back to mock fixtures if Databricks is unavailable. The map page uses
+`/api/map/facilities`, `/api/desert`, and `/api/desert/summary`; it no longer
+depends on the search endpoint's `top_k` result limit.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

@@ -322,6 +322,20 @@ export async function getDesertRows(params: {
   return parseJson(response, z.array(PinCodeDesertSchema));
 }
 
+export async function getMapFacilities(params: {
+  capability?: string;
+  state?: string;
+  limit?: number;
+}): Promise<FacilityTrustRecord[]> {
+  const search = new URLSearchParams();
+  if (params.capability) search.set("capability", params.capability);
+  if (params.state) search.set("state", params.state);
+  if (params.limit) search.set("limit", String(params.limit));
+  const qs = search.toString();
+  const response = await apiFetch(`${API_BASE_URL}/api/map/facilities${qs ? `?${qs}` : ""}`);
+  return parseJson(response, z.array(FacilityTrustRecordSchema));
+}
+
 export async function getDesertSummary(params: {
   capability?: string;
   state?: string;

@@ -9,7 +9,7 @@ import { AmbulanceModal, SOSButton } from "@/components/ambulance-modal";
 import { FacilityDetailSheet } from "@/components/facility-detail-sheet";
 import { MapView } from "@/components/map-view";
 import { Badge } from "@/components/ui/badge";
-import { getDesertRows, getDesertSummary, queryFacilities } from "@/lib/api";
+import { getDesertRows, getDesertSummary, getMapFacilities } from "@/lib/api";
 import { fadeInUp, stagger } from "@/lib/motion";
 import { useFiltersStore } from "@/lib/stores/use-filters-store";
 import { CAPABILITIES, CAPABILITY_LABELS, type DesertSummary } from "@/lib/types";
@@ -21,6 +21,8 @@ const CAPABILITY_OPTIONS = [
     label: CAPABILITY_LABELS[capability],
   })),
 ];
+
+const MAP_FACILITY_LIMIT = 500;
 
 function DesertStatCard({
   summary,
@@ -83,19 +85,19 @@ export default function MapPage() {
     staleTime: 5 * 60_000,
   });
 
-  // Load a representative set of facilities for the map pins.
-  // Uses the same reasoning pipeline as the search page — all Bihar facilities.
-  const { data: searchData } = useQuery({
-    queryKey: ["map-facilities"],
+  const {
+    data: facilities = [],
+    isPending: facilitiesPending,
+    isError: facilitiesError,
+  } = useQuery({
+    queryKey: ["map-facilities", capabilityFilter],
     queryFn: () =>
-      queryFacilities({
-        text: "all facilities Bihar",
-        min_trust_score: 0,
-        top_k: 20,
+      getMapFacilities({
+        capability: capabilityFilter || undefined,
+        limit: MAP_FACILITY_LIMIT,
       }),
     staleTime: 5 * 60_000,
   });
-  const facilities = searchData?.candidates ?? [];
 
   return (
     <>
@@ -168,6 +170,13 @@ export default function MapPage() {
               ) : (
                 <p className="text-small text-text-muted">No desert zones found.</p>
               )}
+              {facilitiesError ? (
+                <p className="mt-3 text-small text-warn-200">
+                  Could not load facility pins. The map will only show desert zones.
+                </p>
+              ) : facilitiesPending ? (
+                <p className="mt-3 text-small text-text-muted">Loading facility pins…</p>
+              ) : null}
             </div>
 
             {summary?.top_deserts.length ? (
@@ -227,7 +236,10 @@ export default function MapPage() {
             </div>
 
             <div className="glass-panel rounded-2xl p-4">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="outline" className="border-border-strong font-mono text-mono-data">
+                  {facilities.length} pins
+                </Badge>
                 <Badge variant="outline" className="border-border-strong font-mono text-mono-data">
                   {summary?.total_rows ?? deserts.length} zones
                 </Badge>

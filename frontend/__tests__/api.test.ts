@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { queryFacilities } from "@/lib/api";
+import { getMapFacilities, queryFacilities } from "@/lib/api";
 
 describe("api client", () => {
   afterEach(() => {
@@ -100,5 +100,38 @@ describe("api client", () => {
     await expect(
       queryFacilities({ text: "test", min_trust_score: 0.5, top_k: 10 }),
     ).rejects.toThrow(/Request timed out/i);
+  });
+
+  it("loads map facilities from the dedicated map endpoint", async () => {
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(
+        JSON.stringify([
+          {
+            facility_id: "F00001",
+            facility_name: "Madhepura District Hospital",
+            pin_code: "852113",
+            state: "Bihar",
+            district: "Madhepura",
+            lat: 25.921,
+            lon: 86.792,
+            facility_type: "District Hospital",
+            normalization_version: "normalizer_v1",
+            capabilities: [],
+            overall_trust_score: 0.9,
+            extraction_run_ids: ["mock-run-001"],
+            last_updated: "2026-04-26T00:00:00Z",
+          },
+        ]),
+        { status: 200, statusText: "OK" },
+      ),
+    );
+
+    const response = await getMapFacilities({ capability: "dialysis", limit: 500 });
+
+    expect(response).toHaveLength(1);
+    expect(fetchMock).toHaveBeenCalledWith(
+      "http://localhost:8000/api/map/facilities?capability=dialysis&limit=500",
+      expect.any(Object),
+    );
   });
 });

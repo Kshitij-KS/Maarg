@@ -4,9 +4,15 @@ from __future__ import annotations
 
 import os
 from functools import lru_cache
+from pathlib import Path
 from typing import Literal
 
+from dotenv import load_dotenv
 from pydantic import BaseModel, Field
+
+# Load .env from the project root (backend/) so env vars are available
+# whether the server is started with `uvicorn` directly or via a process manager.
+load_dotenv(Path(__file__).resolve().parents[2] / ".env", override=False)
 
 
 class ApiSettings(BaseModel):

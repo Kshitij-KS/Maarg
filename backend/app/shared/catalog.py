@@ -12,7 +12,13 @@ import os
 from pathlib import Path
 from typing import Any, TypeVar
 
+from dotenv import load_dotenv
 from pydantic import BaseModel
+
+# Load .env before any os.getenv calls so HACKATHON_MODE and Databricks
+# credentials are available regardless of how the server process was started.
+_ENV_FILE = Path(__file__).resolve().parents[2] / ".env"
+load_dotenv(_ENV_FILE, override=False)
 
 from app.shared.schemas import FacilityTrustRecord, PinCodeDesert
 from app.shared.databricks_catalog import (

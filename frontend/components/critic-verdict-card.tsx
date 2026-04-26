@@ -6,7 +6,7 @@ import { CheckCircle2, ChevronDown, CircleAlert, Loader2, XOctagon } from "lucid
 import { useState } from "react";
 
 import { getTraceTimeline } from "@/lib/api";
-import { haloPulse, scalePopIn, slideInLeft } from "@/lib/motion";
+import { scalePopIn, slideInLeft } from "@/lib/motion";
 import type { QueryResponse } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -71,13 +71,10 @@ export function CriticVerdictCard({
 
   return (
     <div className="relative">
-      <motion.div
+      <div
         aria-hidden
-        variants={haloPulse}
-        initial="rest"
-        animate="pulse"
         className={cn(
-          "pointer-events-none absolute -inset-3 -z-10 rounded-[1.35rem] blur-2xl",
+          "pointer-events-none absolute -inset-2 -z-10 rounded-[1.3rem] opacity-50 blur-2xl",
           haloTint,
         )}
       />

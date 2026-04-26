@@ -1,0 +1,56 @@
+version: "1.0"
+
+requirements:
+  advanced_surgery:
+    required_equipment_any:
+      - "operation theatre"
+      - "OT"
+    required_staff_any:
+      - "anesthesiologist"
+      - "anaesthetist"
+    missing_staff_flag: "missing_anesthesiologist"
+    missing_equipment_flag: "missing_operation_theatre"
+
+  emergency_obstetric_care:
+    required_equipment_any:
+      - "operation theatre"
+      - "labour room"
+    required_staff_any:
+      - "obstetrician"
+      - "gynaecologist"
+      - "OB-GYN"
+    missing_staff_flag: "missing_obstetrician"
+    missing_equipment_flag: "missing_obstetric_ot"
+
+  neonatal_icu:
+    required_equipment_any:
+      - "incubator"
+      - "radiant warmer"
+      - "baby warmer"
+    required_staff_any:
+      - "neonatologist"
+      - "paediatrician"
+    missing_staff_flag: "missing_neonatal_staff"
+    missing_equipment_flag: "missing_neonatal_equipment"
+
+  dialysis:
+    required_equipment_any:
+      - "dialysis machine"
+      - "RO water system"
+    required_staff_any:
+      - "nephrologist"
+      - "dialysis technician"
+    missing_staff_flag: "missing_dialysis_staff"
+    missing_equipment_flag: "missing_dialysis_equipment"
+
+  emergency_trauma:
+    required_equipment_any:
+      - "trauma bay"
+      - "resuscitation room"
+      - "defibrillator"
+    required_staff_any:
+      - "emergency physician"
+      - "casualty officer"
+      - "trauma surgeon"
+    missing_staff_flag: "missing_trauma_staff"
+    missing_equipment_flag: "missing_trauma_equipment"

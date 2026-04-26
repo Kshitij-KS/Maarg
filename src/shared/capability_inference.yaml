@@ -1,0 +1,112 @@
+version: "1.0"
+
+inferences:
+  advanced_surgery:
+    required_any_equipment:
+      - "anesthesia machine"
+      - "general anesthesia machine"
+      - "anesthesia workstation"
+    required_any_staff:
+      - "anesthesiologist"
+      - "anaesthetist"
+    supporting_equipment:
+      - "operation theatre"
+      - "OT"
+      - "surgical lights"
+      - "electrocautery"
+      - "suction machine"
+    base_confidence: 0.7
+    notes: "Advanced surgery is impossible without anesthesia capability"
+
+  emergency_obstetric_care:
+    required_any_equipment:
+      - "operation theatre"
+      - "OT"
+    required_any_staff:
+      - "obstetrician"
+      - "OB-GYN"
+      - "gynaecologist"
+      - "Obs & Gynae"
+    supporting_equipment:
+      - "neonatal resuscitaire"
+      - "baby warmer"
+      - "labour room"
+      - "LR"
+      - "blood bank"
+    base_confidence: 0.65
+
+  neonatal_icu:
+    required_any_equipment:
+      - "incubator"
+      - "radiant warmer"
+      - "baby warmer"
+    supporting_equipment:
+      - "phototherapy unit"
+      - "neonatal ventilator"
+      - "pulse oximeter"
+      - "NICU"
+    base_confidence: 0.6
+
+  dialysis:
+    required_any_equipment:
+      - "dialysis machine"
+      - "haemodialysis"
+      - "hemodialysis"
+      - "RO water system"
+      - "dialyzer"
+    base_confidence: 0.85
+    notes: "Dialysis is equipment-bound; if no machine is mentioned, claim is suspect"
+
+  emergency_trauma:
+    required_any_equipment:
+      - "trauma bay"
+      - "emergency OT"
+      - "ambulance bay"
+      - "resuscitation room"
+    required_any_staff:
+      - "emergency physician"
+      - "casualty officer"
+      - "trauma surgeon"
+    supporting_equipment:
+      - "defibrillator"
+      - "ventilator"
+      - "C-arm"
+    base_confidence: 0.6
+
+  icu:
+    required_any_equipment:
+      - "ventilator"
+      - "ICU bed"
+      - "ICU"
+      - "ICCU"
+    supporting_equipment:
+      - "pulse oximeter"
+      - "patient monitor"
+      - "defibrillator"
+      - "infusion pump"
+    base_confidence: 0.65
+
+contradictions:
+  advanced_surgery:
+    claim_flag: "EQUIPMENT_CLAIM_MISMATCH"
+    description: "Claims Advanced Surgery but no anesthesia machine or anesthesiologist found"
+    coherence_penalty: 0.4
+    inference_score_cap: 0.15
+
+  dialysis:
+    claim_flag: "EQUIPMENT_CLAIM_MISMATCH"
+    description: "Claims Dialysis but no dialysis machine or RO system found"
+    coherence_penalty: 0.45
+    inference_score_cap: 0.10
+
+  icu:
+    claim_flag: "UNVERIFIED_ICU_CLAIM"
+    description: "Claims ICU but no ventilator, patient monitor, or ICU beds found"
+    coherence_penalty: 0.3
+    inference_score_cap: 0.20
+
+  emergency_obstetric_care:
+    claim_flag: "OBSTETRIC_CLAIM_UNVERIFIED"
+    description: "Claims Emergency Obstetric Care but no OT or OB-GYN staff found"
+    coherence_penalty: 0.35
+    inference_score_cap: 0.15

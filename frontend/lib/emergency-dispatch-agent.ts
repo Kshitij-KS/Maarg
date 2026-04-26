@@ -140,3 +140,12 @@ export function buildHindiAssistLine(facilityName: string): string {
 export function canSpeakInBrowser(): boolean {
   return typeof window !== "undefined" && "speechSynthesis" in window;
 }
+
+/**
+ * Rough ambulance ETA — assumes ~35 km/h average (Indian roads, traffic, rural/urban mix).
+ * Minimum 5 minutes regardless of distance.
+ */
+export function calculateEtaMinutes(distanceKm: number): number {
+  const avgSpeedKmh = 35;
+  return Math.max(5, Math.ceil((distanceKm / avgSpeedKmh) * 60));
+}

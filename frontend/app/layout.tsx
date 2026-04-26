@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/next";
 import { Nav } from "@/components/nav";
 import { PageTransition } from "@/components/page-transition";
 import { QueryProvider } from "@/components/query-provider";
@@ -49,6 +50,7 @@ export default function RootLayout({
             </TooltipProvider>
           </SupabaseProvider>
         </QueryProvider>
+        <Analytics />
       </body>
     </html>
   );

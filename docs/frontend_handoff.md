@@ -2,9 +2,9 @@
 
 ## Ownership
 
-Claude Design owns `web/**` visual implementation. Person B owns the reasoning/API surface documented here. Do not invent frontend data fields; call these endpoints or ask for an API addition.
+Claude Design owns `frontend/**` visual implementation. Person B owns the reasoning/API surface documented here. Do not invent frontend data fields; call these endpoints or ask for an API addition.
 
-The locked shared contract remains `src/shared/schemas.py`. Frontend-specific convenience models live in `src/api/schemas.py` and wrap the shared contract without changing it.
+The locked shared contract remains `backend/app/shared/schemas.py`. Frontend-specific convenience models live in `backend/app/api/schemas.py` and wrap the shared contract without changing it.
 
 ## Required Demo Sequence
 

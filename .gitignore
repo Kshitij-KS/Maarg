@@ -22,6 +22,7 @@ env/
 # Editor / OS
 .idea/
 .vscode/
+.claude/settings.local.json
 .DS_Store
 Thumbs.db
 
@@ -32,11 +33,13 @@ Thumbs.db
 # MLflow local store
 mlruns/
 mlartifacts/
+backend/mlruns/
+backend/mlartifacts/
 
 # Demo runner output (committed selectively)
-outputs/*.json
-!outputs/hour8_smoke.json
-!outputs/.gitkeep
+backend/outputs/*.json
+!backend/outputs/hour8_smoke.json
+!backend/outputs/.gitkeep
 
 # Generated / fallback fixtures
-fixtures/seed_*.json
+backend/fixtures/seed_*.json

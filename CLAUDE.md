@@ -6,19 +6,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 MIT Hackathon (Challenge 03) — **Indian Healthcare Reasoning Auditor**. A multi-agent reasoning system that audits Indian medical facility records, scores capability claims with calibrated confidence, and maps medical deserts.
 
-**Team split**: Person A owns the Truth Layer (`src/shared/`, fixtures, Gold tables). Person B owns the Reasoning Layer (`src/reasoning/`, `src/api/`). This repo is Person B's lane.
+**Team split**: Person A owns the Truth Layer (`backend/app/shared/`, backend fixtures, Gold tables). Person B owns the Reasoning Layer (`backend/app/reasoning/`, `backend/app/api/`). This repo is Person B's lane.
 
 ## Backend Commands
 
 ```bash
 # Setup
+cd backend
 python -m venv .venv
 source .venv/Scripts/activate          # Windows: .venv\Scripts\Activate.ps1
 pip install -e ".[dev]"
 cp .env.example .env
 
 # Run API server
-uvicorn src.api.server:app --reload --port 8000
+uvicorn app.api.server:app --reload --port 8000
 
 # Tests
 pytest                                 # all tests
@@ -27,17 +28,17 @@ pytest tests/api/                      # API endpoints only
 pytest tests/reasoning/test_pipeline.py  # single file
 
 # Lint / type-check
-ruff check src/
-mypy src/shared/                       # mypy scope is shared/ only
+ruff check app tests scripts
+mypy app/shared                        # mypy scope is shared/ only
 
-# Demo smoke test (writes outputs/hour8_smoke.json)
-python -m src.reasoning.demo
+# Demo smoke test (writes backend/outputs/hour8_smoke.json)
+python -m app.reasoning.demo
 ```
 
 ## Frontend Commands
 
 ```bash
-cd web
+cd frontend
 npm install
 npm run dev        # http://localhost:3000
 npm run build
@@ -46,7 +47,7 @@ npm run typecheck
 npm test           # Vitest
 ```
 
-> **Warning**: This project uses Next.js 15 + React 19, which have breaking changes from prior versions. Before writing any Next.js code, read the relevant guide in `web/node_modules/next/dist/docs/`.
+> **Warning**: This project uses Next.js 15 + React 19, which have breaking changes from prior versions. Before writing any Next.js code, read the relevant guide in `frontend/node_modules/next/dist/docs/`.
 
 ## Key Environment Variables
 
@@ -70,9 +71,9 @@ QueryRequest
   → QueryResponse   (candidates + citations + confidence interval + trace_id)
 ```
 
-Orchestrated by `src/reasoning/pipeline.py:ReasoningPipeline`.
+Orchestrated by `backend/app/reasoning/pipeline.py:ReasoningPipeline`.
 
-### API Layer (`src/api/`)
+### API Layer (`backend/app/api/`)
 
 FastAPI server with routes at:
 - `POST /api/query` — primary facility search
@@ -82,21 +83,21 @@ FastAPI server with routes at:
 - `GET /api/trace/{id}/timeline` — MLflow trace deep-link
 - `GET /api/frontend-contract` — live API contract spec
 
-### Schema Contract (`src/shared/schemas.py`)
+### Schema Contract (`backend/app/shared/schemas.py`)
 
 **LOCKED after Hour 2.** Core models: `FacilityTrustRecord`, `CapabilityClaim`, `Citation`, `QueryRequest`, `QueryResponse`, `PinCodeDesert`. Append-only additions are OK; any breaking change requires a 5-min sync with Person A and a PR title prefixed `SCHEMA CHANGE:`.
 
 ### Mock vs. Real Mode
 
-- `HACKATHON_MODE=mock` (default): reads `fixtures/mock_gold_facility_trust.json` and `fixtures/mock_gold_pin_desert.json`.
+- `HACKATHON_MODE=mock` (default): reads `backend/fixtures/mock_gold_facility_trust.json` and `backend/fixtures/mock_gold_pin_desert.json`.
 - `HACKATHON_MODE=real`: swaps to Databricks Unity Catalog via `databricks-sdk`.
-- The switch is handled in `src/api/adapters/gold_reader.py`.
+- The switch is handled in `backend/app/api/adapters/gold_reader.py`.
 
 ### MLflow Tracing
 
-Every agent function and API handler is decorated with `@traced("name")` from `src/reasoning/tracing/mlflow_setup.py`. The `trace_id` in `QueryResponse` lets the frontend deep-link to the MLflow UI. Local store is `./mlruns/` (gitignored).
+Every agent function and API handler is decorated with `@traced("name")` from `backend/app/reasoning/tracing/mlflow_setup.py`. The `trace_id` in `QueryResponse` lets the frontend deep-link to the MLflow UI. Local store is `backend/mlruns/` when run from `backend/` (gitignored).
 
-### Frontend (`web/`)
+### Frontend (`frontend/`)
 
 Next.js 15 App Router. Key pages: `app/search/`, `app/audit/`, `app/map/`. Uses TanStack React Query for data fetching, Tailwind + shadcn/ui for components, MapBox GL for geographic visualization.
 

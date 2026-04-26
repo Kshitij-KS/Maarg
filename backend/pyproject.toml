@@ -1,0 +1,57 @@
+[project]
+name = "hacknation-reasoning"
+version = "0.0.1"
+description = "MIT Hackathon C03 - Indian Healthcare Reasoning Auditor. Person B: Reasoning Layer (backend)."
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.7",
+    "mlflow>=3.0",
+    "databricks-sdk",
+    "fastapi",
+    "uvicorn[standard]",
+    "python-dotenv",
+    "pyyaml",
+    "numpy",
+    "httpx",
+    "datamodel-code-generator",
+    "python-multipart",
+    "Pillow>=10.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "mypy",
+]
+
+# Frontend deps live in ../frontend/package.json.
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "RUF"]
+
+[tool.mypy]
+python_version = "3.11"
+files = ["app/shared"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]

@@ -10,17 +10,17 @@
 Before writing a single line, understand what has already been built and is already running:
 
 **Person A's Truth Layer (COMPLETE):**
-- `src/trust/` — full extraction, normalization, inference graph, trust scoring pipeline
+- Person A's Truth Layer — full extraction, normalization, inference graph, trust scoring pipeline
 - `gold.facility_trust` — one row per facility with trust scores, capability claims, citations, inference results
 - `gold.pin_code_desert` — one row per (PIN code, capability) with desert scores
-- `src/shared/schemas.py` — locked Pydantic contract (`FacilityTrustRecord`, `CapabilityClaim`, `InferenceResult`, `PinCodeDesert`, `Citation`)
-- `src/shared/capability_inference.yaml` — equipment-to-capability inference graph
-- `src/shared/indian_medical_normalizations.yaml` — Indian-English normalization map
+- `backend/app/shared/schemas.py` — locked Pydantic contract (`FacilityTrustRecord`, `CapabilityClaim`, `InferenceResult`, `PinCodeDesert`, `Citation`)
+- `backend/app/shared/capability_inference.yaml` — equipment-to-capability inference graph
+- `backend/app/shared/indian_medical_normalizations.yaml` — Indian-English normalization map
 
 **Person B's Reasoning Layer (COMPLETE):**
-- `src/reasoning/agents/` — Coordinator, Geo-Reasoner, Critic agents
-- `src/reasoning/api/server.py` — FastAPI server exposing query endpoints
-- `src/frontend/` — Streamlit app with facility search, trust score display, Folium desert map
+- `backend/app/reasoning/agents/` — Coordinator, Geo-Reasoner, Critic agents
+- `backend/app/api/server.py` — FastAPI server exposing query endpoints
+- `frontend/` — Next.js app with facility search, trust score display, and desert map
 - MLflow 3 tracing wired throughout
 
 **You are building the THIRD layer: the Facility Portal.** It must read from and write back into this existing system without breaking anything Person A or Person B has shipped.
@@ -258,66 +258,57 @@ class PortalUser(BaseModel):
 ## 4. FILES YOU OWN
 
 ```
-src/portal/                                  # ← all yours
+backend/app/portal/                          # Portal backend
 ├── api/
 │   ├── router.py                            # FastAPI APIRouter — mounts on /portal
-│   ├── auth.py                              # JWT auth, login, token refresh
-│   ├── routes/
-│   │   ├── registration.py                  # POST /portal/register, GET /portal/register/{id}
-│   │   ├── facility_view.py                 # GET /portal/facility/me (read own Gold record)
-│   │   ├── update_requests.py               # POST, GET /portal/updates
-│   │   ├── proof_upload.py                  # POST /portal/proof/upload
-│   │   └── review_admin.py                  # Admin routes for human reviewer
-│   └── dependencies.py                      # Auth dependency injection
+│   ├── auth.py                              # Auth, login, token helpers
+│   ├── dependencies.py                      # Auth dependency injection
+│   └── routes/
+│       ├── registration.py                  # POST /portal/register, GET /portal/register/{id}
+│       ├── facility_view.py                 # GET /portal/facility/me
+│       ├── update_requests.py               # POST, GET /portal/updates
+│       ├── proof_upload.py                  # POST /portal/proof/upload
+│       └── review_admin.py                  # Admin routes for human reviewer
 ├── db/
-│   ├── portal_tables.py                     # Delta table read/write helpers for portal.*
+│   ├── portal_tables.py                     # Fixture-backed portal table helpers
 │   └── gold_reader.py                       # READ-ONLY wrapper for gold.facility_trust
-├── services/
-│   ├── registration_service.py              # Business logic for registration flow
-│   ├── update_service.py                    # Business logic for update request flow
-│   ├── proof_service.py                     # File upload, EXIF extraction, location verify
-│   ├── matcher.py                           # Fuzzy match registration to gold.facility_trust
-│   └── notification_service.py             # Email notifications on status changes
-├── frontend/                                # React (Vite + TypeScript)
-│   ├── src/
-│   │   ├── pages/
-│   │   │   ├── Register.tsx                 # Step 1: Registration form
-│   │   │   ├── RegistrationStatus.tsx       # Step 2: Application status page
-│   │   │   ├── Login.tsx                    # Portal login
-│   │   │   ├── FacilityDashboard.tsx        # Main dashboard — shows Gold data
-│   │   │   ├── UpdateRequest.tsx            # Field-level update request form
-│   │   │   ├── ProofCapture.tsx             # Camera + location capture component
-│   │   │   └── AdminReview.tsx              # Human reviewer queue
-│   │   ├── components/
-│   │   │   ├── TrustScoreCard.tsx           # Shows facility's trust score + breakdown
-│   │   │   ├── CapabilityTable.tsx          # Shows capability claims + inference results
-│   │   │   ├── UpdateRequestCard.tsx        # Shows status of submitted requests
-│   │   │   ├── CameraCapture.tsx            # Camera + geolocation proof component
-│   │   │   └── FieldEditForm.tsx            # Inline field edit with proof gating
-│   │   └── api/
-│   │       └── portalClient.ts              # Typed API client for all portal routes
 ├── schemas/
-│   └── portal_schemas.py                    # Pydantic models from §3 above
-└── tests/
-    ├── test_registration.py
-    ├── test_update_requests.py
-    ├── test_proof_service.py
-    └── test_matcher.py
+│   └── portal_schemas.py                    # Pydantic portal models
+└── services/
+    ├── update_service.py                    # Business logic for update request flow
+    ├── proof_service.py                     # File upload and proof metadata
+    ├── matcher.py                           # Match registration to gold.facility_trust
+    └── dashboard_service.py                 # Facility dashboard assembly
 
-notebooks/
-└── C_admin_review.ipynb                     # Reviewer's notebook for manual verification
+backend/tests/portal/                        # Portal backend tests
+├── test_portal_api.py
+├── test_update_service.py
+└── test_matcher.py
+
+frontend/                                    # Next.js app router frontend
+├── app/portal/
+│   ├── register/page.tsx                    # Step 1: Registration form
+│   ├── register/status/[registrationId]/page.tsx
+│   ├── login/page.tsx                       # Portal login
+│   ├── dashboard/page.tsx                   # Main dashboard — shows Gold data
+│   ├── updates/new/page.tsx                 # Field-level update request form
+│   └── admin/review/page.tsx                # Human reviewer queue
+├── components/portal/
+│   └── camera-capture.tsx                   # Camera + geolocation proof component
+└── lib/
+    └── portal-client.ts                     # Typed API client for all portal routes
 ```
 
 **Do NOT touch:**
-- `src/trust/` — Person A's domain
-- `src/reasoning/` — Person B's domain
-- `src/frontend/` — Person B's Streamlit app
+- Person A's external Truth Layer — Person A's domain
+- `backend/app/reasoning/` — Person B's domain
+- `frontend/` — Person B's Next.js app
 - `gold.*` tables — read-only for you
 
 **Integration points (touch carefully, with notice):**
-- `src/reasoning/api/server.py` — add one line: `app.include_router(portal_router, prefix="/portal")`
-- `src/shared/schemas.py` — read only. If you need a new schema field, propose it to Person A first.
-- `src/trust/pipelines/02_extract_silver.py` — Person A adds a `portal.approved_updates` merge step. You provide the schema; Person A implements the ingestion.
+- `backend/app/api/server.py` — add one line: `app.include_router(portal_router, prefix="/portal")`
+- `backend/app/shared/schemas.py` — read only. If you need a new schema field, propose it to Person A first.
+- Person A's Truth Layer pipeline — Person A adds a `portal.approved_updates` merge step. You provide the schema; Person A implements the ingestion.
 
 ---
 
@@ -422,7 +413,7 @@ On approval:
 This is the core policy decision. Be precise. Some fields are self-reportable. Others require evidence. Others are forbidden (system-computed or too sensitive to trust self-report).
 
 ```python
-# src/portal/services/update_service.py
+# backend/app/portal/services/update_service.py
 
 ALLOWED_UPDATE_FIELDS = {
 
@@ -587,7 +578,7 @@ When a user tries to update a field in the `equipment`, `clinical`, or `capabili
 8. Only enable the "Submit Update Request" button once at least one proof photo is uploaded.
 
 ```typescript
-// src/portal/frontend/src/components/CameraCapture.tsx
+// frontend/components/portal/camera-capture.tsx
 interface CaptureResult {
   photoBlob: Blob;
   locationLat: number;
@@ -826,9 +817,9 @@ def merge_approved_updates(facilities_df: DataFrame) -> DataFrame:
 
 ## 12. TECH STACK — PORTAL LAYER
 
-**Frontend:** React 18 + TypeScript + Vite. TailwindCSS for styling. No UI library (keep it fast to build). Axios for API calls. React Query for server state.
+**Frontend:** Next.js 15 + React 19 + TypeScript. TailwindCSS and shadcn/ui for styling. Fetch-based API clients and React Query for server state.
 
-**Backend:** Extend Person B's FastAPI server. New `APIRouter` in `src/portal/api/router.py`. Mount in Person B's `server.py` with one line.
+**Backend:** Extend Person B's FastAPI server. New `APIRouter` in `backend/app/portal/api/router.py`. Mount in Person B's `server.py` with one line.
 
 **Auth:** PyJWT for token generation. `passlib[bcrypt]` for password hashing. Add both to `pyproject.toml` with Person A's sync.
 
@@ -918,19 +909,19 @@ When you receive this prompt and say "go", your first response is:
 2. Wait for approval.
 3. Then immediately do a **sync with Person A** on the `portal.approved_updates` schema — propose the exact schema from §3.4 and get confirmation that their pipeline can ingest it.
 4. Create files in this order:
-   - `src/portal/schemas/portal_schemas.py`
-   - `src/portal/db/portal_tables.py` (table creation + read/write helpers)
-   - `src/portal/db/gold_reader.py` (read-only wrapper for gold.facility_trust)
-   - `src/portal/services/matcher.py`
-   - `src/portal/services/update_service.py` (with `ALLOWED_UPDATE_FIELDS`)
-   - `src/portal/api/auth.py`
-   - `src/portal/api/routes/registration.py`
-   - `src/portal/api/routes/facility_view.py`
-   - `src/portal/api/routes/update_requests.py`
-   - `src/portal/api/routes/proof_upload.py`
-   - `src/portal/api/routes/review_admin.py`
-   - `src/portal/api/router.py` (aggregates all routes)
-   - `src/portal/frontend/` (React app — scaffold with Vite)
+   - `backend/app/portal/schemas/portal_schemas.py`
+   - `backend/app/portal/db/portal_tables.py` (table creation + read/write helpers)
+   - `backend/app/portal/db/gold_reader.py` (read-only wrapper for gold.facility_trust)
+   - `backend/app/portal/services/matcher.py`
+   - `backend/app/portal/services/update_service.py` (with `ALLOWED_UPDATE_FIELDS`)
+   - `backend/app/portal/api/auth.py`
+   - `backend/app/portal/api/routes/registration.py`
+   - `backend/app/portal/api/routes/facility_view.py`
+   - `backend/app/portal/api/routes/update_requests.py`
+   - `backend/app/portal/api/routes/proof_upload.py`
+   - `backend/app/portal/api/routes/review_admin.py`
+   - `backend/app/portal/api/router.py` (aggregates all routes)
+   - `frontend/app/portal/`, `frontend/components/portal/`, and `frontend/lib/portal-client.ts`
 5. Begin with backend first, frontend second. A working API with a minimal frontend beats a beautiful UI with a broken backend.
 
 ---

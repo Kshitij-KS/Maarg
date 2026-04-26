@@ -1,0 +1,15 @@
+[
+  {
+    "organization_id": "demo-org-f00002",
+    "facility_id": "F00002",
+    "registration_id": "demo-registration-f00002",
+    "name": "Rural Surgical Centre",
+    "legal_name": "Rural Surgical Centre",
+    "primary_email": "portal-demo@maarg.test",
+    "primary_phone": "+91 9876543210",
+    "status": "active",
+    "created_at": "2026-04-26T06:35:00Z",
+    "approved_at": "2026-04-26T06:35:00Z",
+    "approved_by": "portal_admin"
+  }
+]

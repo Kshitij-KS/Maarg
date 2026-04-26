@@ -2,8 +2,16 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Layers, MapPin } from "lucide-react";
-import { useCallback, useRef, useState } from "react";
-import Map, { Marker, NavigationControl, type MapRef } from "react-map-gl/mapbox";
+import { useCallback, useMemo, useRef, useState } from "react";
+import Map, {
+  Layer,
+  Marker,
+  NavigationControl,
+  Source,
+  type LayerProps,
+  type MapMouseEvent,
+  type MapRef,
+} from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import { desertMarkerKey } from "@/lib/map-markers";
@@ -19,102 +27,96 @@ if (
   !MAPBOX_TOKEN
 ) {
   console.warn(
-    "[map-view] NEXT_PUBLIC_MAPBOX_TOKEN is empty — rendering placeholder map. Set it in frontend/.env.local to enable live tiles.",
+    "[map-view] NEXT_PUBLIC_MAPBOX_TOKEN is empty — set it in frontend/.env.local to enable live tiles.",
   );
 }
 
-const BIHAR_CENTER = { longitude: 86.9, latitude: 25.85, zoom: 8 };
+const BIHAR_CENTER = { longitude: 86.9, latitude: 25.85, zoom: 7 };
+
+// Mapbox expression: map trust score → colour
+const TRUST_COLOR_EXPR = [
+  "case",
+  [">=", ["get", "trust"], 0.8], "#22c55e",
+  [">=", ["get", "trust"], 0.5], "#f59e0b",
+  "#ef4444",
+] as unknown as string;
+
+// Unclustered facility circle layer
+const unclusteredCircle: LayerProps = {
+  id: "facilities-unclustered",
+  type: "circle",
+  source: "facilities",
+  filter: ["!", ["has", "point_count"]],
+  paint: {
+    "circle-color": TRUST_COLOR_EXPR,
+    "circle-radius": [
+      "interpolate", ["linear"], ["zoom"],
+      6, 4,
+      10, 7,
+      14, 11,
+    ],
+    "circle-stroke-width": 1.5,
+    "circle-stroke-color": "rgba(255,255,255,0.6)",
+    "circle-opacity": 0.92,
+  },
+};
+
+
+// Cluster bubble
+const clusterCircle: LayerProps = {
+  id: "facilities-clusters",
+  type: "circle",
+  source: "facilities",
+  filter: ["has", "point_count"],
+  paint: {
+    "circle-color": [
+      "step", ["get", "point_count"],
+      "#60a5fa",   // <10  light blue
+      10, "#3b82f6",   // <50  blue
+      50, "#1d4ed8",   // <200 dark blue
+      200, "#1e3a8a",  // 200+ navy
+    ],
+    "circle-radius": [
+      "step", ["get", "point_count"],
+      18, 10, 24, 50, 32, 200, 42,
+    ],
+    "circle-stroke-width": 2,
+    "circle-stroke-color": "rgba(255,255,255,0.4)",
+    "circle-opacity": 0.88,
+  },
+};
+
+// Cluster count label
+const clusterCount: LayerProps = {
+  id: "facilities-cluster-count",
+  type: "symbol",
+  source: "facilities",
+  filter: ["has", "point_count"],
+  layout: {
+    "text-field": "{point_count_abbreviated}",
+    "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+    "text-size": 13,
+  },
+  paint: { "text-color": "#ffffff" },
+};
+
+// Desert heatmap circle
+const desertCircle: LayerProps = {
+  id: "deserts-layer",
+  type: "circle",
+  source: "deserts",
+  paint: {
+    "circle-color": "#ef4444",
+    "circle-opacity": ["interpolate", ["linear"], ["get", "score"], 0, 0.3, 1, 0.65],
+    "circle-radius": ["interpolate", ["linear"], ["get", "score"], 0, 10, 1, 32],
+    "circle-blur": 0.6,
+  },
+};
 
 function trustColor(score: number): string {
-  if (score >= 0.8) return "#22c55e";   // green
-  if (score >= 0.5) return "#f59e0b";   // amber
-  return "#ef4444";                      // red
-}
-
-function trustRing(score: number): string {
-  if (score >= 0.8) return "rgba(34,197,94,0.3)";
-  if (score >= 0.5) return "rgba(245,158,11,0.3)";
-  return "rgba(239,68,68,0.3)";
-}
-
-function FacilityPin({
-  facility,
-  selected,
-  onClick,
-}: {
-  facility: FacilityTrustRecord;
-  selected: boolean;
-  onClick: () => void;
-}) {
-  const color = trustColor(facility.overall_trust_score);
-  const ring = trustRing(facility.overall_trust_score);
-
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={`Select ${facility.facility_name}`}
-      className="group relative flex cursor-pointer flex-col items-center"
-      style={{ background: "none", border: "none", padding: 0 }}
-    >
-      <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        whileHover={{ scale: 1.2 }}
-        transition={{ type: "spring", stiffness: 500, damping: 22 }}
-        className="relative flex h-8 w-8 items-center justify-center rounded-full border-2"
-        style={{
-          backgroundColor: color,
-          borderColor: selected ? "#fff" : "rgba(255,255,255,0.5)",
-          boxShadow: selected
-            ? `0 0 0 4px ${ring}, 0 0 20px ${color}`
-            : `0 0 0 2px ${ring}`,
-        }}
-      >
-        <MapPin size={14} color="white" fill="white" />
-        {selected && (
-          <motion.span
-            layoutId="selected-ring"
-            className="absolute inset-0 rounded-full"
-            style={{ boxShadow: `0 0 0 3px ${color}` }}
-            transition={{ type: "spring", stiffness: 500, damping: 30 }}
-          />
-        )}
-      </motion.div>
-      {/* Pulse ring for high-trust facilities */}
-      {facility.overall_trust_score >= 0.8 && (
-        <motion.span
-          className="pointer-events-none absolute h-8 w-8 rounded-full"
-          style={{ backgroundColor: color, opacity: 0.3 }}
-          animate={{ scale: [1, 1.8, 1], opacity: [0.3, 0, 0.3] }}
-          transition={{ duration: 2.5, repeat: Infinity }}
-        />
-      )}
-      {/* Tooltip */}
-      <div
-        className="pointer-events-none absolute bottom-10 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-xl border border-border-default bg-surface-raised px-3 py-1.5 text-small text-text-primary opacity-0 shadow-card transition-opacity group-hover:opacity-100"
-      >
-        {facility.facility_name}
-      </div>
-    </button>
-  );
-}
-
-function DesertPin({ desert }: { desert: PinCodeDesert }) {
-  const intensity = desert.desert_score;
-  return (
-    <motion.div
-      initial={{ scale: 0, opacity: 0 }}
-      animate={{ scale: 1, opacity: 0.7 }}
-      className="pointer-events-none flex items-center justify-center rounded-full"
-      style={{
-        width: `${Math.max(16, intensity * 40)}px`,
-        height: `${Math.max(16, intensity * 40)}px`,
-        backgroundColor: `rgba(239, 68, 68, ${Math.min(0.7, intensity * 0.8)})`,
-        border: "1px solid rgba(239,68,68,0.4)",
-      }}
-    />
-  );
+  if (score >= 0.8) return "#22c55e";
+  if (score >= 0.5) return "#f59e0b";
+  return "#ef4444";
 }
 
 type MapViewProps = {
@@ -142,17 +144,85 @@ export function MapView({
   const [tokenInvalid, setTokenInvalid] = useState(false);
   const mapRef = useRef<MapRef>(null);
 
-  const handleMarkerClick = useCallback(
-    (facility: FacilityTrustRecord) => {
-      openFacility(facility.facility_id);
-      mapRef.current?.flyTo({
-        center: [facility.lon, facility.lat],
-        zoom: 12,
-        duration: 800,
+  // Build GeoJSON FeatureCollection for facilities (memoised — stable until facilities array changes)
+  const facilityGeoJSON = useMemo(
+    () => ({
+      type: "FeatureCollection" as const,
+      features: facilities.map((f) => ({
+        type: "Feature" as const,
+        geometry: { type: "Point" as const, coordinates: [f.lon, f.lat] },
+        properties: {
+          id: f.facility_id,
+          name: f.facility_name,
+          trust: f.overall_trust_score,
+          state: f.state,
+          district: f.district,
+        },
+      })),
+    }),
+    [facilities],
+  );
+
+  // Build GeoJSON for desert zones
+  const desertGeoJSON = useMemo(
+    () => ({
+      type: "FeatureCollection" as const,
+      features: deserts.map((d, i) => ({
+        type: "Feature" as const,
+        geometry: { type: "Point" as const, coordinates: [d.lon, d.lat] },
+        properties: { id: desertMarkerKey(d, i), score: d.desert_score },
+      })),
+    }),
+    [deserts],
+  );
+
+  const selectedFilter = useMemo(
+    () => ["==", ["get", "id"], activeFacilityId ?? ""] as unknown as string,
+    [activeFacilityId],
+  );
+
+  const handleMapClick = useCallback(
+    (evt: MapMouseEvent) => {
+      const map = mapRef.current?.getMap();
+      if (!map) return;
+
+      // Cluster click → zoom in
+      const clusterFeatures = map.queryRenderedFeatures(evt.point, {
+        layers: ["facilities-clusters"],
       });
+      if (clusterFeatures.length) {
+        const cluster = clusterFeatures[0];
+        const clusterId = cluster.properties?.cluster_id as number;
+        const source = map.getSource("facilities") as mapboxgl.GeoJSONSource;
+        source.getClusterExpansionZoom(clusterId, (err, zoom) => {
+          if (err || zoom == null) return;
+          const geo = cluster.geometry as GeoJSON.Point;
+          map.easeTo({ center: geo.coordinates as [number, number], zoom, duration: 500 });
+        });
+        return;
+      }
+
+      // Facility click → open detail sheet + flyTo
+      const facilityFeatures = map.queryRenderedFeatures(evt.point, {
+        layers: ["facilities-unclustered"],
+      });
+      if (facilityFeatures.length) {
+        const props = facilityFeatures[0].properties as { id: string };
+        openFacility(props.id);
+        const geo = facilityFeatures[0].geometry as GeoJSON.Point;
+        map.flyTo({ center: geo.coordinates as [number, number], zoom: 12, duration: 700 });
+      }
     },
     [openFacility],
   );
+
+  // Pointer cursor over interactive layers
+  const handleMouseEnter = useCallback(() => {
+    mapRef.current?.getMap().getCanvas().style.setProperty("cursor", "pointer");
+  }, []);
+  const handleMouseLeave = useCallback(() => {
+    mapRef.current?.getMap().getCanvas().style.setProperty("cursor", "");
+  }, []);
 
   if (!MAPBOX_TOKEN || tokenInvalid) {
     return (
@@ -164,15 +234,15 @@ export function MapView({
         style={{ height }}
       >
         <div className="absolute inset-0 soft-grid opacity-30" />
-        {facilities.map((f, i) => (
+        {facilities.slice(0, 12).map((f, i) => (
           <motion.button
             key={f.facility_id}
             type="button"
             onClick={() => openFacility(f.facility_id)}
             className="absolute flex cursor-pointer flex-col items-center"
             style={{
-              left: `${20 + (i % 3) * 28}%`,
-              top: `${25 + Math.floor(i / 3) * 35}%`,
+              left: `${20 + (i % 4) * 20}%`,
+              top: `${25 + Math.floor(i / 4) * 22}%`,
               background: "none",
               border: "none",
             }}
@@ -186,9 +256,6 @@ export function MapView({
             >
               <MapPin size={14} color="white" fill="white" />
             </div>
-            <span className="mt-1 max-w-[80px] rounded-md bg-surface-base/80 px-1 text-center font-mono text-[10px] text-text-secondary backdrop-blur">
-              {f.facility_name.split(" ").slice(0, 2).join(" ")}
-            </span>
           </motion.button>
         ))}
         <div className="relative z-10 rounded-2xl border border-border-subtle bg-surface-base/80 px-5 py-3 text-center backdrop-blur">
@@ -216,20 +283,52 @@ export function MapView({
         style={{ width: "100%", height: "100%" }}
         mapStyle="mapbox://styles/mapbox/dark-v11"
         reuseMaps
+        interactiveLayerIds={["facilities-clusters", "facilities-unclustered"]}
+        onClick={handleMapClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         onError={(evt) => {
           const status = (evt.error as { status?: number } | undefined)?.status;
-          if (status === 401 || status === 403) {
-            if (typeof console !== "undefined") {
-              console.warn(
-                "[map-view] Mapbox auth failed — falling back to placeholder. Check NEXT_PUBLIC_MAPBOX_TOKEN.",
-                evt.error,
-              );
-            }
-            setTokenInvalid(true);
-          }
+          if (status === 401 || status === 403) setTokenInvalid(true);
         }}
       >
         <NavigationControl position="top-right" showCompass={false} />
+
+        {/* Desert heatmap — GeoJSON circle layer */}
+        {showDeserts && (
+          <Source id="deserts" type="geojson" data={desertGeoJSON}>
+            <Layer {...desertCircle} />
+          </Source>
+        )}
+
+        {/* Facility cluster source — all 10k records as WebGL circles */}
+        <Source
+          id="facilities"
+          type="geojson"
+          data={facilityGeoJSON}
+          cluster
+          clusterMaxZoom={13}
+          clusterRadius={50}
+        >
+          <Layer {...clusterCircle} />
+          <Layer {...clusterCount} />
+          <Layer {...(unclusteredCircle as LayerProps)} />
+          {/* Selected facility highlight ring — driven by activeFacilityId */}
+          <Layer
+            id="facilities-selected"
+            type="circle"
+            source="facilities"
+            filter={selectedFilter as unknown as LayerProps["filter"]}
+            paint={{
+              "circle-color": "transparent",
+              "circle-radius": ["interpolate", ["linear"], ["zoom"], 6, 8, 14, 16],
+              "circle-stroke-width": 2.5,
+              "circle-stroke-color": "#ffffff",
+              "circle-opacity": 0,
+              "circle-stroke-opacity": 1,
+            }}
+          />
+        </Source>
 
         {/* User location marker */}
         {userLat != null && userLon != null && (
@@ -241,35 +340,6 @@ export function MapView({
             />
           </Marker>
         )}
-
-        {/* Desert heatmap overlays */}
-        {showDeserts &&
-          deserts.map((d, index) => (
-            <Marker
-              key={desertMarkerKey(d, index)}
-              latitude={d.lat}
-              longitude={d.lon}
-              anchor="center"
-            >
-              <DesertPin desert={d} />
-            </Marker>
-          ))}
-
-        {/* Facility markers — onClick only on the inner button to avoid double-fire */}
-        {facilities.map((facility) => (
-          <Marker
-            key={facility.facility_id}
-            latitude={facility.lat}
-            longitude={facility.lon}
-            anchor="bottom"
-          >
-            <FacilityPin
-              facility={facility}
-              selected={activeFacilityId === facility.facility_id}
-              onClick={() => handleMarkerClick(facility)}
-            />
-          </Marker>
-        ))}
       </Map>
 
       {/* Legend */}
@@ -281,13 +351,16 @@ export function MapView({
           { label: "< 0.50 — Low", color: "#ef4444" },
         ].map(({ label, color }) => (
           <div key={label} className="flex items-center gap-2">
-            <span
-              className="h-2.5 w-2.5 rounded-full"
-              style={{ backgroundColor: color }}
-            />
+            <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: color }} />
             <span className="font-mono text-[11px] text-text-secondary">{label}</span>
           </div>
         ))}
+        {showDeserts && (
+          <div className="flex items-center gap-2">
+            <span className="h-2.5 w-2.5 rounded-full bg-danger-500 opacity-60" />
+            <span className="font-mono text-[11px] text-text-secondary">Medical desert</span>
+          </div>
+        )}
       </div>
 
       {/* Desert toggle */}
@@ -317,7 +390,7 @@ export function MapView({
             className="absolute left-4 top-4 rounded-xl border border-border-default bg-surface-base/85 px-3 py-1.5 backdrop-blur-sm"
           >
             <span className="font-mono text-mono-data text-text-primary">
-              {facilities.length} facilit{facilities.length === 1 ? "y" : "ies"} mapped
+              {facilities.length.toLocaleString()} facilit{facilities.length === 1 ? "y" : "ies"} mapped
             </span>
           </motion.div>
         )}

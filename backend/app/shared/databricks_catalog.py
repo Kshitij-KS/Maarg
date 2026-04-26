@@ -28,6 +28,12 @@ class DatabricksGoldCatalog:
             from databricks import sql
         except ImportError as exc:
             raise RuntimeError("databricks-sql-connector is not installed.") from exc
+        if not hasattr(sql, "connect"):
+            raise RuntimeError(
+                "databricks-sql-connector is not installed or is shadowed by "
+                "databricks-sdk. Install backend dependencies again so "
+                "`from databricks import sql; sql.connect(...)` is available."
+            )
 
         with sql.connect(
             server_hostname=self.settings.databricks_server_hostname,

@@ -12,6 +12,11 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   outputFileTracingRoot: here,
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "webpersona-dev.vercel.app" },
+    ],
+  },
 };
 
 export default nextConfig;

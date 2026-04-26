@@ -3,7 +3,8 @@
 import { animate } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Activity, ArrowRight, CheckCircle2, Database, MapPinned, ShieldCheck } from "lucide-react";
+import { Activity, ArrowRight, CheckCircle2, Database, ExternalLink, MapPinned, ShieldCheck } from "lucide-react";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 
@@ -17,6 +18,25 @@ import { EASE, fadeInUp, stagger } from "@/lib/motion";
 import { useFiltersStore } from "@/lib/stores/use-filters-store";
 import type { DemoMoment } from "@/lib/types";
 import { cn } from "@/lib/utils";
+
+const FOUNDERS = [
+  {
+    name: "Ujjawal Anand",
+    title: "Co-Founder",
+    bio: "Driving product and vision. Previously building developer tools and AI-powered experiences.",
+    avatar: "https://webpersona-dev.vercel.app/images/ujjawal.png",
+    linkedin: "https://www.linkedin.com/in/ujjawalanandofficial/",
+    github: "https://github.com/anand-official",
+  },
+  {
+    name: "Kshitij Singh",
+    title: "Co-Founder",
+    bio: "Product-minded builder with a cloud and DevOps edge, focused on reliable, scalable experiences.",
+    avatar: "https://webpersona-dev.vercel.app/images/kshitij.png",
+    linkedin: "https://www.linkedin.com/in/kshitij-singh-ks/",
+    github: "https://github.com/Kshitij-KS",
+  },
+] as const;
 
 const FACILITY_COUNT = 10247;
 const LAST_UPDATED = "14:32 IST";
@@ -297,6 +317,69 @@ export default function Home() {
       <div className="relative mx-auto mt-16 w-full max-w-5xl">
         <PartnerEcosystemCta />
       </div>
+
+      {/* Founders */}
+      <motion.section
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        className="relative mx-auto mt-24 w-full max-w-5xl"
+      >
+        <div className="mb-8 text-center">
+          <p className="text-eyebrow text-text-muted">The team</p>
+          <h2 className="mt-2 text-h1 text-text-primary">Built by</h2>
+        </div>
+
+        <div className="grid gap-5 sm:grid-cols-2">
+          {FOUNDERS.map((founder) => (
+            <div
+              key={founder.name}
+              className="editorial-panel group relative overflow-hidden rounded-2xl p-6"
+            >
+              <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-trust-glow blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              <div className="relative flex items-start gap-5">
+                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-border-default">
+                  <Image
+                    src={founder.avatar}
+                    alt={founder.name}
+                    fill
+                    className="object-cover"
+                    sizes="64px"
+                  />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-h3 text-text-primary">{founder.name}</p>
+                  <p className="mt-0.5 font-mono text-mono-data text-trust-400">{founder.title}</p>
+                  <p className="mt-2 text-small leading-relaxed text-text-secondary">{founder.bio}</p>
+                  <div className="mt-4 flex items-center gap-3">
+                    <a
+                      href={founder.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${founder.name} on LinkedIn`}
+                      className="flex items-center gap-1.5 rounded-lg border border-border-default bg-surface-raised/60 px-2.5 py-1.5 text-small text-text-secondary transition-colors hover:border-trust-400/40 hover:text-trust-300"
+                    >
+                      <ExternalLink size={13} aria-hidden />
+                      LinkedIn
+                    </a>
+                    <a
+                      href={founder.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${founder.name} on GitHub`}
+                      className="flex items-center gap-1.5 rounded-lg border border-border-default bg-surface-raised/60 px-2.5 py-1.5 text-small text-text-secondary transition-colors hover:border-border-strong hover:text-text-primary"
+                    >
+                      <ExternalLink size={13} aria-hidden />
+                      GitHub
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </motion.section>
     </main>
   );
 }

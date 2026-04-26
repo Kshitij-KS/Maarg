@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from app.reasoning.tracing.mlflow_setup import set_trace_attributes, traced
 from app.shared.catalog import load_facility_trust
-from app.shared.schemas import Citation
+from app.shared.schemas import Citation, FacilityTrustRecord
 
 
 class VectorClient:
@@ -24,6 +24,12 @@ class VectorClient:
             set_trace_attributes({"facility_found": False, "citation_count": 0})
             return []
 
+        return self.citations_from_facility(facility, query, k=k)
+
+    @traced("vector_client.citations_from_facility")
+    def citations_from_facility(
+        self, facility: FacilityTrustRecord, query: str, k: int = 3
+    ) -> list[Citation]:
         citations: list[Citation] = []
         for claim in facility.capabilities:
             if claim.claim_present:

@@ -7,6 +7,7 @@ import inspect
 import os
 import time
 import uuid
+from collections import OrderedDict
 from collections.abc import Callable
 from typing import Any, ParamSpec, TypeVar
 
@@ -14,15 +15,39 @@ P = ParamSpec("P")
 R = TypeVar("R")
 _TRACE_STACK: list[str] = []
 _LAST_TRACE_ID = ""
-_FALLBACK_TRACES: dict[str, list[dict[str, Any]]] = {}
+_FALLBACK_TRACES: OrderedDict[str, list[dict[str, Any]]] = OrderedDict()
+_TRUE_VALUES = {"1", "true", "yes", "on"}
+
+
+def _mlflow_enabled() -> bool:
+    return os.getenv("MLFLOW_ENABLED", "false").strip().lower() in _TRUE_VALUES
+
+
+def _fallback_trace_limit() -> int:
+    raw_limit = os.getenv("MLFLOW_FALLBACK_TRACE_LIMIT", "25")
+    try:
+        return max(1, int(raw_limit))
+    except ValueError:
+        return 25
 
 
 def _mlflow() -> Any | None:
+    if not _mlflow_enabled():
+        return None
     try:
         import mlflow
     except ModuleNotFoundError:
         return None
     return mlflow
+
+
+def _remember_fallback_span(trace_id: str, span: dict[str, Any]) -> None:
+    if trace_id not in _FALLBACK_TRACES:
+        while len(_FALLBACK_TRACES) >= _fallback_trace_limit():
+            _FALLBACK_TRACES.popitem(last=False)
+        _FALLBACK_TRACES[trace_id] = []
+    _FALLBACK_TRACES.move_to_end(trace_id)
+    _FALLBACK_TRACES[trace_id].append(span)
 
 
 def init_mlflow(experiment_name: str | None = None) -> None:
@@ -63,7 +88,7 @@ def traced(name: str) -> Callable[[Callable[P, R]], Callable[P, R]]:
                     "end_time_ms": None,
                     "attributes": {},
                 }
-                _FALLBACK_TRACES.setdefault(trace_id, []).append(span)
+                _remember_fallback_span(trace_id, span)
                 os.makedirs(os.getenv("MLFLOW_TRACKING_URI", "./mlruns"), exist_ok=True)
                 try:
                     return func(*args, **kwargs)

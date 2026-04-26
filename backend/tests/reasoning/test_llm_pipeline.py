@@ -29,6 +29,11 @@ class FakeGeoReasoner:
 
 
 class FakeVectorClient:
+    def citations_from_facility(
+        self, facility: FacilityTrustRecord, query: str, k: int = 3
+    ) -> list[Citation]:
+        return []
+
     def citations_for(self, facility_id: str, query: str) -> list[Citation]:
         return []
 
@@ -106,6 +111,34 @@ def test_pipeline_falls_back_when_llm_agent_fails() -> None:
     assert geo_reasoner.last_request.top_k == 10
     assert response.critic_verdict == "supported"
     assert response.critic_reasoning == "Deterministic fallback reasoning."
+
+
+def test_pipeline_reuses_ranked_candidates_for_citations() -> None:
+    class CandidateOnlyVectorClient:
+        def __init__(self) -> None:
+            self.seen_facility_ids: list[str] = []
+
+        def citations_from_facility(
+            self, facility: FacilityTrustRecord, query: str, k: int = 3
+        ) -> list[Citation]:
+            self.seen_facility_ids.append(facility.facility_id)
+            return []
+
+        def citations_for(self, facility_id: str, query: str) -> list[Citation]:
+            raise AssertionError("pipeline should not reload facilities for citations")
+
+    vector_client = CandidateOnlyVectorClient()
+    pipeline = ReasoningPipeline(
+        coordinator=FakeCoordinator(),  # type: ignore[arg-type]
+        geo_reasoner=FakeGeoReasoner(),  # type: ignore[arg-type]
+        vector_client=vector_client,  # type: ignore[arg-type]
+        critic=FakeCritic(),  # type: ignore[arg-type]
+        llm_agent=FailingLLMAgent(),  # type: ignore[arg-type]
+    )
+
+    pipeline.answer_query(QueryRequest(text="find care", top_k=10))
+
+    assert vector_client.seen_facility_ids == ["F00001"]
 
 
 def _facility() -> FacilityTrustRecord:

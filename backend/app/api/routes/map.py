@@ -18,7 +18,7 @@ def map_facilities(
     capability: str | None = Query(default=None),
     limit: int = Query(default=1000, ge=1, le=1000),
 ) -> list[FacilityTrustRecord]:
-    rows = facilities()
+    rows = facilities(limit=limit)
     if state is not None:
         rows = [row for row in rows if row.state.lower() == state.lower()]
     if capability is not None:

@@ -227,7 +227,7 @@ const DemoMomentsResponseSchema: z.ZodType<DemoMomentsResponse> = z.object({
   ),
 });
 
-const DEFAULT_TIMEOUT_MS = 12_000;
+const DEFAULT_TIMEOUT_MS = 30_000;
 
 async function parseJson<T>(response: Response, schema: z.ZodType<T>): Promise<T> {
   if (!response.ok) {

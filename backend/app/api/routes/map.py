@@ -16,7 +16,7 @@ router = APIRouter(prefix="/api/map", tags=["map"])
 def map_facilities(
     state: str | None = Query(default=None),
     capability: str | None = Query(default=None),
-    limit: int = Query(default=10000, ge=1, le=10000),
+    limit: int = Query(default=1000, ge=1, le=1000),
 ) -> list[FacilityTrustRecord]:
     rows = facilities()
     if state is not None:

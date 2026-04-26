@@ -22,7 +22,7 @@ const CAPABILITY_OPTIONS = [
   })),
 ];
 
-const MAP_FACILITY_LIMIT = 10000;
+const MAP_FACILITY_LIMIT = 1000;
 
 function DesertStatCard({
   summary,

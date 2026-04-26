@@ -1,35 +1,103 @@
-# Maarg
+# Maarg: The Healthcare Truth Layer for Critical Care Discovery
 
-**Indian Healthcare Reasoning Auditor** · MIT Hackathon (Challenge 03)  
-**Repository:** [github.com/Kshitij-KS/Maarg](https://github.com/Kshitij-KS/Maarg)
+> **This README is the team’s end-to-end hackathon submission document.** It tells the product story, the technical proof, what to run, what to show judges, and the exact text for portal fields. Treat it as the main dossier for anyone who lands on the repository.
+
+| | |
+| --- | --- |
+| **Event** | MIT Hackathon (Challenge 03) · Indian Healthcare Reasoning Auditor |
+| **Repository** | [github.com/Kshitij-KS/Maarg](https://github.com/Kshitij-KS/Maarg) |
+| **Team ID** | `HN-9492` |
+| **Deployment record** | April 26, 2026 |
+| **Team** | **Ujjawal Anand** (contributor) · **Kshitij Singh** (contributor) |
+| **Lead author (dossier)** | Ujjawal Anand · B.Tech CSE · Kalinga Institute of Industrial Technology (KIIT) · ML and backend focus |
+
+---
+
+## How to read this page
+
+1. **Skim the identity and executive summary** for what we built.  
+2. **Follow the story and problem** for why it matters.  
+3. **Use “What to show in the demo” and the two-minute script** on demo day.  
+4. **Use “Under the hood” and repository layout** for technical depth.  
+5. **Copy portal fields 1–6** when pasting into the host submission form.  
+6. **Run through the checklists** before the deadline.
+
+**Yes — you can add pictures and screenshots.** GitHub renders them from this repo. See [Visual evidence (screenshots and diagrams)](#visual-evidence-screenshots-and-diagrams) for paths and examples.
+
+---
+
+## Table of contents
+
+- [Project identity and executive summary](#project-identity-and-executive-summary)  
+- [The story in one minute](#the-story-in-one-minute)  
+- [The problem (what breaks today)](#the-problem-what-breaks-today)  
+- [Who this is for](#who-this-is-for)  
+- [What makes Maarg different (USP)](#what-makes-maarg-different-usp)  
+- [What you can show in the demo (product surface)](#what-you-can-show-in-the-demo-product-surface)  
+- [Visual evidence (screenshots and diagrams)](#visual-evidence-screenshots-and-diagrams)  
+- [Under the hood (technical depth)](#under-the-hood-technical-depth)  
+- [Why this is not “another health chatbot”](#why-this-is-not-another-health-chatbot)  
+- [Quickstart (local)](#quickstart-local)  
+- [Two-minute judge demo (scripted)](#two-minute-judge-demo-scripted)  
+- [Repository layout](#repository-layout)  
+- [Results, impact, and what is next (honest framing)](#results-impact-and-what-is-next-honest-framing)  
+- [Submission portal: copy-paste (fields 1 to 6)](#submission-portal-copy-paste-fields-1-to-6)  
+- [Hackathon submission checklist](#hackathon-submission-checklist)  
+- [License and event use](#license-and-event-use)  
+
+---
+
+## Project identity and executive summary
+
+**मारग (Maarg)** means *the path*. The product is the path from **claim → evidence → validation → confidence → action**.
+
+Maarg is an **AI-powered healthcare reasoning system** that turns unreliable, unstructured facility data into **verified, evidence-backed intelligence**: not just *where* a hospital is, but **whether the record supports what it claims** about critical care. Search, audit, maps, and **MLflow-traced** reasoning form one story: **calibrated trust**, **citations**, **medical deserts**, and a **facility portal** that lets organizations submit **evidence-backed** corrections instead of silent edits to the truth layer.
 
 ---
 
 ## The story in one minute
 
-Imagine someone you care about needs **emergency obstetric care**, right now. The old answer is a list of hospitals sorted by distance. Distance is not the same as **capacity** or **truth**. Many facilities **claim** capabilities that the evidence does not fully support. Others are never seen by families who are **routed by panic and SEO**, not by proof.
+Someone you care about needs **emergency obstetric care**, now. The old answer is a list sorted by distance. **Distance is not capacity, and a claim on a PDF is not proof on the ward.** Families and responders are forced into **guesswork**, **incomplete listings**, or **proximity** when they need **certainty**.
 
-**Maarg** is built for that gap. It does not replace ambulances or doctors. It replaces **guesswork with an auditable path**: we take structured truth from a **Gold truth layer** (facility trust, capability claims, citations), run a **multi-agent reasoning pipeline** that filters by geography and trust, pulls **evidence**, and asks a **Critic** whether the answer is grounded. Every run returns a **`trace_id`** so you can open the same reasoning in **MLflow** and show a judge: *this is not vibes, this is a pipeline.*
-
-**मारग (Maarg)** means *the path*. This project is the path from **claim** to **evidence** to **confidence** to **action on a map**.
+Maarg does not replace clinicians or ambulances. It gives you an **auditable path**: pull structured truth from a **Gold layer** (trust, capabilities, citations), run a **multi-agent pipeline** (coordinate intent, **geo**-filter, **evidence**, **Critic**), return **ranked candidates** with **per-claim confidence** and a **`trace_id`** you can open in **MLflow** and show a judge: **this is a pipeline, not a vibe.**
 
 ---
 
 ## The problem (what breaks today)
 
-1. **Claims drift from reality.** Paper and PDF say one thing; the ward at 2 a.m. may say another.  
-2. **Lists do not equal care.** Nearest is not the same as *able to treat*.  
+1. **Claims drift from reality.** Paper says one thing; the night ward may say another.  
+2. **Lists are not care.** Nearest is not the same as *able to treat this case*.  
 3. **Planners see counts, not stress.** You need **where critical capability is missing**, not only where buildings exist.
 
-Maarg attacks **(1)** with citations and trust scores, **(2)** with geo + capability reasoning, **(3)** with **medical desert** signals tied to the same Gold layer.
+**Core insight:** the crisis in Indian facility data is not only **incompleteness**. It is **unverified claims**: a site can list advanced surgery without the team, or an ICU label without the equipment story in the notes. **Knowing a facility exists is not the same as knowing it can help.** Maarg is built around that distinction.
 
 ---
 
 ## Who this is for
 
-- **Families and responders** who need a defensible shortlist under time pressure.  
-- **NGOs and public health** teams who map access with **evidence**, not anecdotes.  
-- **Planners** who fund infrastructure against **verified** gaps.
+- Patients and families under time pressure  
+- Emergency coordinators and field responders  
+- NGOs and public health teams  
+- Policy and planning leads who allocate against **evidence**, not anecdotes  
+
+---
+
+## What makes Maarg different (USP)
+
+| Typical tool | Maarg |
+| --- | --- |
+| “Nearest hospital” | **Nearest that the evidence supports** for the capability you asked for |
+| Opaque “AI says” | **Coordinator → GeoReasoner → citations → Critic**, with **`trace_id` → MLflow** |
+| Binary yes or no on a capability | **Calibrated confidence** on claims (trust score, intervals on signals in the contract) |
+| Map as decoration | **Deserts + trust + inference** on the **same** Gold facts |
+
+**Truth layer (Person A domain):** capability claims are tied to an **equipment-to-capability inference graph** in the extraction story: the system can **surface contradictions** between what a facility implies and what inventory and text support, and **penalize trust** when claims do not line up, with **traceable** source text. **Person B** ships the **reasoning API and UI** that **consume** that Gold and make it legible to users and judges.
+
+**Facility portal:** corrections are not free text that silently rewrites Gold. Updates go through a **controlled queue**; where the product requires it, **photo proof** is captured with **browser geolocation** so submitters prove context at capture time (see `camera-capture` in the portal). **Approved** changes feed back through the pipeline Person A owns, so the network **improves with verified submissions**, not with unchecked typing.
+
+**Emergency assist (this repo):** the **dispatch-style agent** ranks nearby facilities, builds a **verbal briefing** (including Hindi assist), and exposes **`tel:`** links to hospital lines plus **112**. The **user’s device** places the call. There is **no** server-side autodial, **no** live bed-availability API in this stack: the demo is **honest** about that boundary.
+
+**Core loop for the pitch:** **claim → evidence → validation → confidence.**
 
 ---
 
@@ -37,37 +105,66 @@ Maarg attacks **(1)** with citations and trust scores, **(2)** with geo + capabi
 
 | Surface | What judges see |
 | --- | --- |
-| **Search** | Natural-language query, ranked **candidates**, **trust**, **Critic verdict**, per-facility **citations**, **`trace_id`** for MLflow. |
-| **Audit** | One facility page: capabilities, confidence bands, flags, proof sentences. |
-| **Map** | Facilities + **desert** layers by capability (mock **Gold** in contest; **Databricks** in `real` mode). |
-| **Portal** | Org login, **same** trust record the public layer uses, **evidence-backed** correction requests (queued, not silent DB edits). |
-| **Emergency assist** | Location, ranked facilities, **dispatch-style briefing** + `tel:` (user places the call; no autodial). |
+| **Search** | Query, **candidates**, **trust**, **Critic** verdict, **citations per candidate**, **`trace_id`**. |
+| **Audit** | One facility: capabilities, **flags**, **proof sentences**, confidence context. |
+| **Map** | Facilities + **desert** view by capability (`mock` fixtures; **`real` → Databricks**). |
+| **Portal** | Org view of **their** trust record, **update requests** with **proof** where required. |
+| **Emergency assist** | Location, **ranked** facilities, **briefing** + `tel:` (user dials; **112** prominent). |
+
+---
+
+## Visual evidence (screenshots and diagrams)
+
+**Pictures and screenshots are encouraged.** GitHub README supports standard Markdown images. Store assets in the repo so the submission stays self-contained after archive (avoid hotlinks that break later).
+
+**Recommended location:** [docs/submission/screenshots/](docs/submission/screenshots/) — add PNG or JPG (WebP is fine on current GitHub). **Typical size:** 1280×720 or 1920×1080 for hero shots; keep files under a few MB each for fast load.
+
+**Markdown pattern** (from repository root):
+
+```markdown
+![Maarg home — search cockpit](./docs/submission/screenshots/01-home.png)
+```
+
+**Suggested set for judges (rename as you add files):**
+
+| File (example) | What it shows |
+| --- | --- |
+| `01-home.png` | Home / demo entry |
+| `02-search.png` | Search with candidates + trace affordance |
+| `03-audit.png` | Facility audit + citations / flags |
+| `04-map.png` | Map + desert or facility layer |
+| `05-mlflow.png` | MLflow trace for `trace_id` |
+| `06-portal.png` | Portal queue or proof capture (if demoed) |
+
+**Mermaid in README:** the pipeline diagram in [Under the hood](#under-the-hood-technical-depth) renders on GitHub without extra image files. You can add more Mermaid in this file for sequence or architecture if needed.
+
+**Optional:** for the hackathon “gallery” field, the same image paths work; you can also attach hosted URLs in the portal if the host allows external links.
 
 ---
 
 ## Under the hood (technical depth)
 
-### Reasoning pipeline (the spine of the product)
+### Reasoning pipeline
 
-Each `POST /api/query` builds a [`QueryResponse`](backend/app/shared/schemas.py) through a single **ReasoningPipeline** ([`backend/app/reasoning/pipeline.py`](backend/app/reasoning/pipeline.py)):
+Each `POST /api/query` returns a [`QueryResponse`](backend/app/shared/schemas.py) from **ReasoningPipeline** ([`backend/app/reasoning/pipeline.py`](backend/app/reasoning/pipeline.py)):
 
-1. **Coordinator:** intent from text, regex-style routing, applies user filters (distance, trust, capabilities, `top_k`).  
-2. **LLMReasoningAgent (optional):** can **parse** and **explain** with **fallback** to deterministic behavior if the LLM path fails (see `_llm_parse_or_fallback` / `_llm_explain_or_fallback`).  
-3. **GeoReasoner:** turns the routed pool into **geographically sensible candidates** with trust context.  
-4. **VectorClient:** **citation retrieval** per candidate (stub; pluggable for your vector store).  
-5. **Critic:** **grounds** the story: verdict + reasoning string on whether claims line up with evidence.  
-6. **MLflow:** `@traced` spans; **trace attributes** (intent, candidate count, critic verdict); **`trace_id`** returned to the client for **timeline** deep links.
+1. **Coordinator:** intent, filters (distance, trust, capabilities, `top_k`).  
+2. **LLMReasoningAgent (optional):** parse / explain with **fallback** to deterministic code if the LLM path errors.  
+3. **GeoReasoner:** geographic candidate set with trust context.  
+4. **VectorClient:** citation bundle per facility (stub; swappable for your vector store).  
+5. **Critic:** grounded verdict and reasoning string.  
+6. **MLflow:** `@traced` spans, attributes, **`trace_id`** for **timeline** APIs.
 
 ```mermaid
 flowchart LR
-  subgraph input
+  subgraph in
     Q[QueryRequest]
   end
   subgraph agents
     C[Coordinator]
-    L[LLM parse optional]
+    L[LLM optional]
     G[GeoReasoner]
-    V[VectorClient citations]
+    V[VectorClient]
     X[Critic]
   end
   subgraph out
@@ -76,54 +173,35 @@ flowchart LR
   Q --> C --> L --> G --> V --> X --> R
 ```
 
-**Why this impresses juries:** you can name **agents**, show **a real trace**, and show **Pydantic contracts** on the wire, not a single opaque LLM call.
+### Data, contract, and team split
 
-### Data and modes
+- **`HACKATHON_MODE=mock`:** [`backend/fixtures/`](backend/fixtures/).  
+- **`HACKATHON_MODE=real`:** Databricks **Unity Catalog** (credentials in env).  
+- **[`backend/app/shared/schemas.py`](backend/app/shared/schemas.py):** **locked** contract between **Person A** (Gold, extraction, inference) and **Person B** (reasoning, API, frontend, portal). Append-only; breaking changes need explicit sync.  
+- **Person B in this repo:** `reasoning/`, `api/`, `portal/`, MLflow, Next.js.
 
-- **`HACKATHON_MODE=mock`:** JSON under [`backend/fixtures/`](backend/fixtures/) (fast, reproducible, offline).  
-- **`HACKATHON_MODE=real`:** read **Gold** from **Databricks Unity Catalog** (requires `DATABRICKS_HOST` + `DATABRICKS_TOKEN`).  
-- **Schema** [`backend/app/shared/schemas.py`](backend/app/shared/schemas.py) is the **lock** between **Person A** (truth, extraction, Gold) and **Person B** (reasoning, API, this UI). **Append-only** is fine; breaking changes need an explicit team sync (see [CLAUDE.md](CLAUDE.md)).
+### API (FastAPI)
 
-### API surface (FastAPI)
+- `POST /api/query` · `GET /api/facility/{id}/evidence` · `GET /api/desert/summary` · `GET /api/trace/{id}/timeline` · `GET /api/demo-moments` · `POST` under `/portal/*` (registration, updates; **not** direct Gold writes)
 
-Representative routes (all logged under MLflow at handler level where decorated):
+### Frontend
 
-- `POST /api/query`: main search.  
-- `GET /api/facility/{id}/evidence`: audit page data.  
-- `GET /api/desert/summary`: map and desert story.  
-- `GET /api/trace/{id}/timeline`: tie **`trace_id`** to a **timeline** for the pitch.  
-- `GET /api/demo-moments`: **demo cockpit** on the home page.  
-- `POST /api/...` under **`/portal/*`:** registration, login, updates (facility-owned tables; **not** a direct write to Gold).
-
-### Frontend stack
-
-- **Next.js 15**, **TypeScript**, **TanStack React Query**, **Mapbox**, **Tailwind** + shadcn-style components.  
-- Optional **Supabase** helpers for **future** auth and data; core demo runs against **FastAPI** + static fixtures.  
-- From repo root, `npm run dev` can proxy to the **frontend** (see root [`package.json`](package.json)).
-
-### Team split (how serious teams ship)
-
-- **Person A:** extraction, **Gold** tables, **fixtures**, inference graph behind trust scores.  
-- **Person B (this repo’s lane):** **reasoning**, **API**, **MLflow**, **Next.js** demo, **portal** API seam.
-
-That split is a **VC and judge signal**: you are not a one-off script; you are a **system with contracts**.
+**Next.js 15**, **TypeScript**, **TanStack Query**, **Mapbox**, **Tailwind** and shadcn-style UI. Optional **Supabase** wiring for future auth. Root `npm run dev` can target `frontend` via [root `package.json`](package.json).
 
 ---
 
-## Why Maarg is not “another health chatbot”
+## Why this is not “another health chatbot”
 
 | Chat or list app | Maarg |
 | --- | --- |
-| One-shot text | **Multi-agent** pipeline with explicit stages |
-| “Trust us” | **Critic** + **citations** + **calibrated** scores |
+| One-shot text | **Multi-agent** pipeline with named stages |
+| “Trust us” | **Critic** + **citations** + **calibrated** signals |
 | No provenance | **`trace_id` → MLflow** |
-| Map as decoration | **Desert** + **trust** + **inference** on the same facts |
-
-**Core loop we repeat in the pitch:** **claim → evidence → validation → confidence.**
+| Map only | **Desert + trust + same facts** |
 
 ---
 
-## Quickstart (local, reproducible)
+## Quickstart (local)
 
 **Backend**
 
@@ -142,12 +220,11 @@ uvicorn app.api.server:app --reload --port 8000
 cd frontend
 npm install
 cp .env.example .env.local
-# NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
 npm run dev
 # http://localhost:3000
 ```
 
-**Tests and smoke**
+**Tests / smoke**
 
 ```bash
 cd backend
@@ -158,23 +235,23 @@ python -m app.reasoning.demo
 | Variable | Default | Role |
 | --- | --- | --- |
 | `HACKATHON_MODE` | `mock` | `mock` = fixtures, `real` = Databricks |
-| `MLFLOW_TRACKING_URI` | `./mlruns` | Traces and experiments |
-| `NEXT_PUBLIC_API_BASE_URL` | `http://localhost:8000` | Browser → API |
+| `MLFLOW_TRACKING_URI` | `./mlruns` | Experiments and traces |
+| `NEXT_PUBLIC_API_BASE_URL` | `http://localhost:8000` | Browser to API |
 
-More env detail: [CLAUDE.md](CLAUDE.md), `backend/.env.example`, `frontend/.env.example`.
+More: [CLAUDE.md](CLAUDE.md), `backend/.env.example`, `frontend/.env.example`.
 
 ---
 
 ## Two-minute judge demo (scripted)
 
-1. **Home:** demo cockpit, fire a **demo moment** that hits **`/api/query`** (or fallback copy if API is down).  
-2. **Search:** show **candidates**, **trust**, **Critic** line, **copy `trace_id`**.  
-3. **MLflow (killer 15 seconds):** open the trace; point at **stages and attributes**.  
-4. **Audit:** open fixture **F00042** (dialysis story in materials); walk **citations** and **flags**.  
-5. **Map:** one **desert** story (e.g. PIN **855107** in docs) + capability filter.  
-6. (Optional) **Portal:** “we close the loop with facilities” + correction form.
+1. **Home:** demo cockpit → **`/api/query`** (or fallback moments if API is offline).  
+2. **Search:** **candidates**, **trust**, **Critic**, **copy `trace_id`**.  
+3. **MLflow:** open the trace, show **stages and attributes** (~15 s).  
+4. **Audit:** e.g. **F00042**; walk **citations** and **flags**.  
+5. **Map:** one **desert** narrative (e.g. PIN **855107** in materials).  
+6. (Optional) **Portal** + (Optional) **emergency** briefing.
 
-**Do not break demo data:** keep **F00001**, **F00002**, **F00042**, PIN **855107** stable in fixtures unless Person A and B agree.
+**Fixture IDs to preserve in mocks:** **F00001**, **F00002**, **F00042**, PIN **855107** (do not rename without team agreement).
 
 ---
 
@@ -183,51 +260,64 @@ More env detail: [CLAUDE.md](CLAUDE.md), `backend/.env.example`, `frontend/.env.
 ```
 backend/
   app/
-    shared/         # Pydantic contract (lock with Person A)
-    reasoning/      # Pipeline, agents, LLM fallbacks, MLflow
-    api/              # FastAPI, Gold adapters, presenters
-    portal/           # Registration and update requests
-  fixtures/           # Mock Gold
-frontend/             # Next.js app, maps, portal UI, emergency flow
+    shared/         # Pydantic contract (Person A + B)
+    reasoning/        # Pipeline, agents, LLM fallbacks, MLflow
+    api/              # FastAPI, adapters
+    portal/           # Registration, updates, proof media
+  fixtures/            # Mock Gold
+frontend/              # Next.js: search, audit, map, portal, emergency UI
 package.json            # optional: npm run dev from repo root
+docs/
+  submission/
+    screenshots/        # optional README visuals (see above)
 ```
 
 ---
 
-## Submission portal: copy-paste (structured 1 to 6)
+## Results, impact, and what is next (honest framing)
+
+**In this submission we show:** structured outputs from messy inputs, **traceable** reasoning, **map-level** access gaps, and a **credible** path to **Databricks-scale** ingestion and reviewer-approved facility updates.
+
+**Direction after the hackathon:** deeper **real-time** verification with live Gold, **tighter** integration with response workflows, and **deployment** for public health and policy where the contract and RLS allow.
+
+The next step for AI in high-stakes settings is not only to **answer**, but to **show the work**. Maarg is a step in that direction.
+
+---
+
+## Submission portal: copy-paste (fields 1 to 6)
 
 **1. Problem and challenge**  
-Indian healthcare data is noisy: claims on paper do not always match the bed, the team, or the device in a crisis. The failure is not only “no hospital on the map” but “**the wrong** hospital for **this** emergency.” We target **unverified claims and blind routing** when every minute matters.
+In crises, people often struggle to **trust** facility data, not only to “find a pin.” Data is fragmented; claims can outrun ground truth. That yields delays, **mis-routing**, and avoidable harm. The core job is **verification of real capability**, not only discovery.
 
 **2. Target audience**  
-Families, responders, NGOs, and planners who need **defensible** lists and **maps** under uncertainty.
+Patients and families; emergency coordinators; NGOs and public health; planners closing infrastructure gaps with evidence.
 
 **3. Solution and core features**  
-Maarg is a **reasoning auditor** on a Gold truth layer: **Coordinator → geo filtering → evidence → Critic**, returning **citations**, **confidence**, a **verdict string**, and a **`trace_id`**. The **map** encodes **medical deserts** on the same facts. A **portal** lets institutions **read their own record** and file **evidence-backed** changes through a **review path**. **Emergency assist** is a **user-driven** call flow (briefing + `tel:`, not autodial).
+Multi-agent **reasoning** on Gold: **Coordinator → geo → evidence → Critic**; **citations**; **trace id**; **medical deserts** on the same layer; **portal** for **evidence-backed** updates; **emergency** UI with **briefing** and **`tel:`** (user places calls).
 
 **4. USP**  
-**Auditable, multi-stage reasoning** (not a single black-box completion), with **MLflow** traces and a **public schema contract** to Person A’s Gold. Built for **high-stakes** selection, not casual chat.
+**Verifiable** pipeline (not a single black-box reply), **MLflow** observability, **Pydantic** contract to Gold, **calibrated** trust story, and **location-aware proof** in the portal where required.
 
 **5. Implementation**  
-**FastAPI** + **Python** pipeline; **MLflow** tracing; **Pydantic** API contract; **Next.js** + **TypeScript** UI; **Mapbox**; **mock** fixtures and a **`real` Databricks** path. Optional **LLM** assist with **safe fallbacks** in the pipeline. Co-owned **schema** in `shared/`.
+**FastAPI**, **Python**, **MLflow**, **Next.js**, **TypeScript**, **Mapbox**, **React Query**; **mock** and **`real`** Databricks; optional **LLM** parse/explain with **code fallbacks**; co-owned **schemas** in `shared/`.
 
 **6. Results and impact (demo scope)**  
-We show **citation-backed** audit pages, **reproducible** traces, **desert** visualization, and a **credible** story for scaling to full Gold ingestion. Stated impact: **faster, better-informed** routing and a **reusable** national truth layer, not a one-off slide.
+We show **citation-backed** audit views, **reproducible** traces, **desert** visualization, and a defensible line to **national-scale** operation when live Gold and reviewers are connected.
 
-**GitHub (required):** `https://github.com/Kshitij-KS/Maarg`  
-**Optional note:** team portal ID **HN-9761** if your event still uses it.  
-**Live URL:** add when hosted; else say “repro from README.”
+**GitHub:** `https://github.com/Kshitij-KS/Maarg`  
+**Team ID:** `HN-9492`  
+**Live demo URL:** add your hosted URL when available; else “clone and run per README.”
 
 ---
 
 ## Hackathon submission checklist
 
-- [ ] **Demo video (~60s):** product story, home → search → audit or map, human pacing.  
-- [ ] **Tech video (~60s):** this README’s **Under the hood** in spoken form: **agents**, **MLflow `trace_id`**, **schema**, **mock vs Databricks**.  
-- [ ] **Play** both in the browser you submit from.  
-- [ ] **Gallery:** UI + (MLflow or trace API response) stills.  
-- [ ] **Team photo:** landscape, lit, not a Zoom screenshot.  
-- [ ] **Event permissions** checkbox on the site.  
+- [ ] **Demo video (~60s):** UX, home → search → audit or map.  
+- [ ] **Tech video (~60s):** agents, **MLflow**, **schema**, **mock vs Databricks**, **honest** limits (no autodial).  
+- [ ] **Play** both videos in the host portal.  
+- [ ] **Gallery:** UI still + **MLflow** or **trace** still.  
+- [ ] **Team photo** (landscape, clear faces).  
+- [ ] **Permissions** checkbox if required.  
 
 **Tags:** `FastAPI` `Next.js` `Python` `TypeScript` `MLflow` `healthcare` `reasoning` `audit` `maps` `Databricks-ready`
 
@@ -235,7 +325,7 @@ We show **citation-backed** audit pages, **reproducible** traces, **desert** vis
 
 ## License and event use
 
-Confirm on the host platform that organizers may use your submission for documentation and **partner** review if that is required by the program.
+Accept the host’s terms for use of your materials in **documentation** and **partner** review where the program requires it.
 
 ---
 

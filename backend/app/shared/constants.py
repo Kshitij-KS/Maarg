@@ -8,9 +8,12 @@ from __future__ import annotations
 
 CAPABILITY_TAXONOMY: tuple[str, ...] = (
     "emergency_obstetric_care",
+    "advanced_surgery",
+    "emergency_trauma",
     "c_section",
     "anesthesiologist_coverage",
     "dialysis",
+    "neonatal_icu",
     "nicu",
     "icu",
     "blood_bank",
@@ -27,6 +30,8 @@ CAPABILITY_KEYWORDS: dict[str, tuple[str, ...]] = {
         "maternal",
         "delivery",
     ),
+    "advanced_surgery": ("advanced surgery", "major surgery", "surgical care"),
+    "emergency_trauma": ("emergency trauma", "trauma", "accident"),
     "c_section": ("c-section", "c section", "cesarean", "caesarean", "cs"),
     "anesthesiologist_coverage": (
         "anesthesiologist",
@@ -35,6 +40,7 @@ CAPABILITY_KEYWORDS: dict[str, tuple[str, ...]] = {
         "anaesthesia",
     ),
     "dialysis": ("dialysis", "hemodialysis", "haemodialysis"),
+    "neonatal_icu": ("neonatal icu", "neonatal intensive"),
     "nicu": ("nicu", "neonatal intensive"),
     "icu": ("icu", "intensive care"),
     "blood_bank": ("blood bank", "blood storage"),

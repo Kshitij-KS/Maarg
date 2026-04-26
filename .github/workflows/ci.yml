@@ -20,3 +20,16 @@ jobs:
         working-directory: backend
       - run: pytest tests/test_schemas.py tests/test_truth_schemas.py tests/trust -v
         working-directory: backend
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+        working-directory: frontend
+      - run: npm run types:api:check
+        working-directory: frontend
+      - run: npm run typecheck
+        working-directory: frontend
+      - run: npm test
+        working-directory: frontend

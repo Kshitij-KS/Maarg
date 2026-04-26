@@ -20,7 +20,15 @@ const CitationSchema = z.object({
   sentence: z.string(),
   char_start: z.number(),
   char_end: z.number(),
-});
+}).passthrough();
+
+const InferenceResultSchema = z.object({
+  inferred_present: z.boolean().nullable(),
+  inference_confidence: z.number(),
+  supporting_equipment: z.array(z.string()),
+  contradictions: z.array(z.string()),
+  inference_flags: z.array(z.string()),
+}).passthrough();
 
 const CapabilityClaimSchema = z.object({
   capability: z.string(),
@@ -28,12 +36,14 @@ const CapabilityClaimSchema = z.object({
   self_consistency_score: z.number(),
   coherence_score: z.number(),
   peer_anomaly_score: z.number(),
+  inference_score: z.number(),
   trust_score: z.number(),
   confidence_interval_low: z.number(),
   confidence_interval_high: z.number(),
   citations: z.array(CitationSchema),
+  inference_detail: InferenceResultSchema.nullable().optional(),
   flags: z.array(z.string()).optional(),
-});
+}).passthrough();
 
 const FacilityTrustRecordSchema = z.object({
   facility_id: z.string(),
@@ -44,11 +54,12 @@ const FacilityTrustRecordSchema = z.object({
   lat: z.number(),
   lon: z.number(),
   facility_type: z.string(),
+  normalization_version: z.string(),
   capabilities: z.array(CapabilityClaimSchema),
   overall_trust_score: z.number(),
   extraction_run_ids: z.array(z.string()),
   last_updated: z.string(),
-});
+}).passthrough();
 
 const PinCodeDesertSchema = z.object({
   pin_code: z.string(),
@@ -132,13 +143,15 @@ const SignalBreakdownSchema = z.object({
   self_consistency_score: z.number(),
   coherence_score: z.number(),
   peer_anomaly_score: z.number(),
+  inference_score: z.number(),
   trust_score: z.number(),
   confidence_interval_low: z.number(),
   confidence_interval_high: z.number(),
   confidence_interval_width: z.number(),
+  inference_contradictions: z.array(z.string()).optional(),
   flags: z.array(z.string()),
   citation_count: z.number(),
-});
+}).passthrough();
 
 const FacilityEvidenceResponseSchema: z.ZodType<FacilityEvidenceResponse> = z.object({
   facility_id: z.string(),

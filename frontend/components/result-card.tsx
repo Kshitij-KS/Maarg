@@ -36,10 +36,20 @@ const cardVariants = cva(
   },
 );
 
-const SIGNAL_LABELS: Record<keyof Pick<CapabilityClaim, "self_consistency_score" | "coherence_score" | "peer_anomaly_score">, string> = {
+const SIGNAL_LABELS: Record<
+  keyof Pick<
+    CapabilityClaim,
+    | "self_consistency_score"
+    | "coherence_score"
+    | "peer_anomaly_score"
+    | "inference_score"
+  >,
+  string
+> = {
   self_consistency_score: "Self-consistency",
   coherence_score: "Coherence",
   peer_anomaly_score: "Peer anomaly",
+  inference_score: "Inference graph",
 };
 
 function pickPrimaryClaim(facility: FacilityTrustRecord): CapabilityClaim | null {
@@ -205,7 +215,7 @@ export function ResultCard({ facility, className, onClick }: ResultCardProps) {
       </div>
 
       {primary ? (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
           <SignalBar
             label={SIGNAL_LABELS.self_consistency_score}
             value={primary.self_consistency_score}
@@ -224,6 +234,21 @@ export function ResultCard({ facility, className, onClick }: ResultCardProps) {
             flagged={flagged}
             delay={0.16}
           />
+          <SignalBar
+            label={SIGNAL_LABELS.inference_score}
+            value={primary.inference_score}
+            flagged={flagged}
+            delay={0.24}
+          />
+        </div>
+      ) : null}
+
+      {primary?.inference_detail?.contradictions.length ? (
+        <div className="rounded-xl border border-warn-400/25 bg-warn-glow px-3 py-2">
+          <p className="text-eyebrow text-warn-200">Inference contradiction</p>
+          <p className="mt-1 text-small text-text-secondary">
+            {primary.inference_detail.contradictions[0]}
+          </p>
         </div>
       ) : null}
 

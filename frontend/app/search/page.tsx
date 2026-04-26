@@ -30,7 +30,7 @@ function CapabilityChip({ capability }: { capability: Capability }) {
       onClick={() => toggle(capability)}
       aria-pressed={active}
       whileTap={{ scale: 0.88 }}
-      animate={{ scale: active ? [1, 1.12, 1] : 1 }}
+      animate={{ scale: active ? 1.08 : 1 }}
       transition={{ type: "spring", stiffness: 500, damping: 22 }}
       className={cn(
         "rounded-full border px-3 py-1.5 text-small transition-colors duration-300",

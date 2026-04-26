@@ -225,6 +225,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/portal/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Me */
+        get: operations["me_portal_me_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/portal/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Logout */
+        post: operations["logout_portal_logout_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/portal/token/refresh": {
         parameters: {
             query?: never;
@@ -236,6 +270,23 @@ export interface paths {
         put?: never;
         /** Refresh Token */
         post: operations["refresh_token_portal_token_refresh_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/portal/password/change": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Change Password */
+        post: operations["change_password_portal_password_change_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -302,6 +353,23 @@ export interface paths {
         };
         /** Facility Score */
         get: operations["facility_score_portal_facility_me_score_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/portal/updates/fields": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Update Fields */
+        get: operations["list_update_fields_portal_updates_fields_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -521,6 +589,8 @@ export interface components {
             coherence_score: number;
             /** Peer Anomaly Score */
             peer_anomaly_score: number;
+            /** Inference Score */
+            inference_score: number;
             /** Trust Score */
             trust_score: number;
             /** Confidence Interval Low */
@@ -529,6 +599,7 @@ export interface components {
             confidence_interval_high: number;
             /** Citations */
             citations: components["schemas"]["Citation"][];
+            inference_detail?: components["schemas"]["InferenceResult"] | null;
             /** Flags */
             flags?: string[];
         };
@@ -839,6 +910,8 @@ export interface components {
             lon: number;
             /** Facility Type */
             facility_type: string;
+            /** Normalization Version */
+            normalization_version: string;
             /** Capabilities */
             capabilities: components["schemas"]["CapabilityClaim"][];
             /** Overall Trust Score */
@@ -899,12 +972,70 @@ export interface components {
             /** Field Name */
             field_name?: string | null;
         };
+        /**
+         * InferenceResult
+         * @description Equipment-to-capability inference details from the Truth Layer.
+         */
+        InferenceResult: {
+            /** Inferred Present */
+            inferred_present: boolean | null;
+            /** Inference Confidence */
+            inference_confidence: number;
+            /** Supporting Equipment */
+            supporting_equipment: string[];
+            /** Contradictions */
+            contradictions: string[];
+            /** Inference Flags */
+            inference_flags: string[];
+        };
         /** LoginRequest */
         LoginRequest: {
             /** Email */
             email: string;
             /** Password */
             password: string;
+        };
+        /**
+         * Organization
+         * @description A verified organization that owns one or more facility portal users.
+         */
+        Organization: {
+            /** Organization Id */
+            organization_id: string;
+            /** Facility Id */
+            facility_id: string;
+            /** Registration Id */
+            registration_id: string;
+            /** Name */
+            name: string;
+            /** Legal Name */
+            legal_name?: string | null;
+            /** Primary Email */
+            primary_email: string;
+            /** Primary Phone */
+            primary_phone: string;
+            /**
+             * Status
+             * @default active
+             * @enum {string}
+             */
+            status: "active" | "suspended";
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Approved At */
+            approved_at?: string | null;
+            /** Approved By */
+            approved_by?: string | null;
+        };
+        /** PasswordChangeRequest */
+        PasswordChangeRequest: {
+            /** Current Password */
+            current_password: string;
+            /** New Password */
+            new_password: string;
         };
         /**
          * PinCodeDesert
@@ -931,6 +1062,58 @@ export interface components {
             distance_km?: number | null;
             /** Desert Score */
             desert_score: number;
+        };
+        /** PortalMeResponse */
+        PortalMeResponse: {
+            user: components["schemas"]["PortalUser"];
+            organization?: components["schemas"]["Organization"] | null;
+        };
+        /**
+         * PortalUser
+         * @description An authenticated facility representative with portal access.
+         */
+        PortalUser: {
+            /** User Id */
+            user_id: string;
+            /** Organization Id */
+            organization_id?: string | null;
+            /** Facility Id */
+            facility_id: string;
+            /** Registration Id */
+            registration_id: string;
+            /** Email */
+            email: string;
+            /** Password Hash */
+            password_hash: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Last Login */
+            last_login?: string | null;
+            /**
+             * Is Active
+             * @default true
+             */
+            is_active: boolean;
+            /**
+             * Role
+             * @default org_owner
+             * @enum {string}
+             */
+            role: "org_owner" | "org_admin" | "org_editor" | "org_viewer" | "facility_admin" | "facility_viewer";
+            /** Display Name */
+            display_name?: string | null;
+            /**
+             * Failed Login Attempts
+             * @default 0
+             */
+            failed_login_attempts: number;
+            /** Locked Until */
+            locked_until?: string | null;
+            /** Password Changed At */
+            password_changed_at?: string | null;
         };
         /**
          * ProofMedia
@@ -1044,6 +1227,11 @@ export interface components {
             /** Trace Id */
             trace_id: string;
         };
+        /** RefreshTokenRequest */
+        RefreshTokenRequest: {
+            /** Refresh Token */
+            refresh_token: string;
+        };
         /** RegistrationCreate */
         RegistrationCreate: {
             /** Facility Name */
@@ -1119,6 +1307,8 @@ export interface components {
             coherence_score: number;
             /** Peer Anomaly Score */
             peer_anomaly_score: number;
+            /** Inference Score */
+            inference_score: number;
             /** Trust Score */
             trust_score: number;
             /** Confidence Interval Low */
@@ -1127,6 +1317,8 @@ export interface components {
             confidence_interval_high: number;
             /** Confidence Interval Width */
             confidence_interval_width: number;
+            /** Inference Contradictions */
+            inference_contradictions?: string[];
             /** Flags */
             flags?: string[];
             /** Citation Count */
@@ -1136,6 +1328,8 @@ export interface components {
         TokenResponse: {
             /** Access Token */
             access_token: string;
+            /** Refresh Token */
+            refresh_token: string;
             /**
              * Token Type
              * @default bearer
@@ -1143,15 +1337,21 @@ export interface components {
             token_type: string;
             /** Expires In Seconds */
             expires_in_seconds: number;
+            /** Refresh Expires In Seconds */
+            refresh_expires_in_seconds: number;
             /** Facility Id */
             facility_id: string;
+            /** Organization Id */
+            organization_id: string;
             /** User Id */
             user_id: string;
             /**
              * Role
              * @enum {string}
              */
-            role: "facility_admin" | "facility_viewer";
+            role: "org_owner" | "org_admin" | "org_editor" | "org_viewer" | "facility_admin" | "facility_viewer";
+            /** Email */
+            email: string;
         };
         /** TraceResponse */
         TraceResponse: {
@@ -1211,6 +1411,26 @@ export interface components {
             found: boolean;
             /** Nodes */
             nodes: components["schemas"]["TraceTimelineNode"][];
+        };
+        /** UpdateFieldMetadata */
+        UpdateFieldMetadata: {
+            /** Field Name */
+            field_name: string;
+            /**
+             * Category
+             * @enum {string}
+             */
+            category: "contact" | "address" | "profile" | "operational" | "clinical" | "equipment" | "capability";
+            /** Requires Proof */
+            requires_proof: boolean;
+            /** Value Type */
+            value_type: string;
+            /** Source Field Name */
+            source_field_name: string;
+            /** Description */
+            description: string;
+            /** Examples */
+            examples?: string[];
         };
         /**
          * UpdateRequest
@@ -1703,7 +1923,7 @@ export interface operations {
             };
         };
     };
-    refresh_token_portal_token_refresh_post: {
+    me_portal_me_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -1718,7 +1938,110 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
+                    "application/json": components["schemas"]["PortalMeResponse"];
+                };
+            };
+        };
+    };
+    logout_portal_logout_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RefreshTokenRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: boolean;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    refresh_token_portal_token_refresh_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RefreshTokenRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
                     "application/json": components["schemas"]["TokenResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    change_password_portal_password_change_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PasswordChangeRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: boolean;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -1827,6 +2150,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["FacilityDashboardResponse"];
+                };
+            };
+        };
+    };
+    list_update_fields_portal_updates_fields_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UpdateFieldMetadata"][];
                 };
             };
         };

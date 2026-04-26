@@ -24,13 +24,22 @@ const baseFacility: FacilityTrustRecord = {
       self_consistency_score: 0.92,
       coherence_score: 0.9,
       peer_anomaly_score: 0.86,
+      inference_score: 0.81,
       trust_score: 0.91,
       confidence_interval_low: 0.84,
       confidence_interval_high: 0.96,
       citations: [],
+      inference_detail: {
+        inferred_present: true,
+        inference_confidence: 0.81,
+        supporting_equipment: ["operation theatre"],
+        contradictions: [],
+        inference_flags: [],
+      },
       flags: [],
     },
   ],
+  normalization_version: "normalizer_v1",
   overall_trust_score: 0.9,
   extraction_run_ids: ["mock-run-001"],
   last_updated: "2026-04-26T00:00:00Z",
@@ -68,5 +77,32 @@ describe("ResultCard", () => {
     expect(article).not.toBeNull();
     expect(article?.getAttribute("data-flagged")).toBe("true");
     expect(screen.getByRole("status", { name: "Flagged" })).toBeInTheDocument();
+  });
+
+  it("renders the Truth Layer inference signal and contradiction copy", () => {
+    const facility: FacilityTrustRecord = {
+      ...baseFacility,
+      capabilities: [
+        {
+          ...baseFacility.capabilities[0],
+          inference_score: 0.25,
+          inference_detail: {
+            inferred_present: false,
+            inference_confidence: 0.25,
+            supporting_equipment: [],
+            contradictions: ["No anesthesiologist evidence for surgical capability."],
+            inference_flags: ["EQUIPMENT_CLAIM_MISMATCH"],
+          },
+          flags: ["EQUIPMENT_CLAIM_MISMATCH"],
+        },
+      ],
+    };
+
+    render(<ResultCard facility={facility} />);
+
+    expect(screen.getByText("Inference graph")).toBeInTheDocument();
+    expect(
+      screen.getByText("No anesthesiologist evidence for surgical capability."),
+    ).toBeInTheDocument();
   });
 });

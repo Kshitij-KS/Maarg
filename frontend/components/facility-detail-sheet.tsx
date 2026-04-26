@@ -132,12 +132,13 @@ function CapabilityRow({ claim }: { claim: CapabilityClaim }) {
       </div>
 
       {/* Signal bars */}
-      <div className="mt-3 grid grid-cols-3 gap-2">
+      <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
         {(
           [
             ["Self-consistency", claim.self_consistency_score],
             ["Coherence", claim.coherence_score],
             ["Peer anomaly", claim.peer_anomaly_score],
+            ["Inference graph", claim.inference_score],
           ] as [string, number][]
         ).map(([label, val]) => (
           <div key={label} className="flex flex-col gap-1">
@@ -154,6 +155,19 @@ function CapabilityRow({ claim }: { claim: CapabilityClaim }) {
           </div>
         ))}
       </div>
+
+      {claim.inference_detail?.contradictions.length ? (
+        <div className="mt-3 rounded-xl border border-warn-400/25 bg-surface-base/35 px-3 py-2">
+          <p className="text-eyebrow text-warn-200">Inference contradiction</p>
+          <ul className="mt-1 space-y-1">
+            {claim.inference_detail.contradictions.map((contradiction) => (
+              <li key={contradiction} className="text-small text-text-secondary">
+                {contradiction}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
 
       {/* Flags */}
       {flagged && (
@@ -238,9 +252,11 @@ function AlternativeCard({
 function FacilitySheetContent({
   facility,
   evidence,
+  evidenceError,
 }: {
   facility: FacilityTrustRecord;
   evidence?: FacilityEvidenceResponse;
+  evidenceError?: Error;
 }) {
   const contact = getContact(facility.facility_id);
   const [altOpen, setAltOpen] = useState(false);
@@ -326,6 +342,23 @@ function FacilitySheetContent({
                   </footer>
                 </blockquote>
               ) : null}
+            </div>
+          </motion.section>
+        ) : evidenceError ? (
+          <motion.section variants={fadeInUp} initial="hidden" animate="visible">
+            <p className="mb-3 text-eyebrow text-text-muted">Evidence verdict</p>
+            <div className="rounded-2xl border border-warn-400/30 bg-warn-glow p-4">
+              <div className="flex items-center gap-2 text-warn-200">
+                <AlertTriangle size={14} aria-hidden />
+                <p className="text-small font-medium">Could not load facility evidence</p>
+              </div>
+              <p className="mt-2 text-small text-text-secondary">
+                The facility record loaded, but the evidence endpoint failed. Check
+                the backend API and reopen this sheet.
+              </p>
+              <p className="mt-2 font-mono text-[11px] text-text-muted">
+                {evidenceError.message}
+              </p>
             </div>
           </motion.section>
         ) : null}
@@ -514,6 +547,12 @@ function FacilitySheetContent({
               </p>
             </div>
             <div>
+              <span className="text-eyebrow text-text-muted">Normalizer</span>
+              <p className="font-mono text-mono-data text-text-secondary">
+                {facility.normalization_version}
+              </p>
+            </div>
+            <div>
               <span className="text-eyebrow text-text-muted">Extraction runs</span>
               <p className="font-mono text-mono-data text-text-secondary">
                 {facility.extraction_run_ids.length}
@@ -548,13 +587,22 @@ export function FacilityDetailSheet() {
   const sheetOpen = useUIStore((s) => s.sheetOpen);
   const setSheetOpen = useUIStore((s) => s.setSheetOpen);
 
-  const { data: facility } = useQuery({
+  const {
+    data: facility,
+    isPending: facilityPending,
+    isError: facilityIsError,
+    error: facilityError,
+  } = useQuery({
     queryKey: ["facility", activeFacilityId],
     queryFn: () => getFacility(activeFacilityId!),
     enabled: activeFacilityId != null,
     staleTime: 60_000,
   });
-  const { data: evidence } = useQuery({
+  const {
+    data: evidence,
+    isError: evidenceIsError,
+    error: evidenceError,
+  } = useQuery({
     queryKey: ["facility-evidence", activeFacilityId],
     queryFn: () => getFacilityEvidence(activeFacilityId!),
     enabled: activeFacilityId != null,
@@ -575,10 +623,32 @@ export function FacilityDetailSheet() {
           </SheetDescription>
         </SheetHeader>
         {facility ? (
-          <FacilitySheetContent facility={facility} evidence={evidence} />
-        ) : (
+          <FacilitySheetContent
+            facility={facility}
+            evidence={evidence}
+            evidenceError={evidenceIsError ? evidenceError : undefined}
+          />
+        ) : facilityIsError ? (
+          <div className="flex h-full items-center justify-center px-6">
+            <div className="max-w-sm rounded-2xl border border-warn-400/30 bg-warn-glow p-5 text-center">
+              <AlertTriangle className="mx-auto text-warn-400" size={24} aria-hidden />
+              <p className="mt-3 text-h3 text-text-primary">Could not load facility</p>
+              <p className="mt-2 text-small text-text-secondary">
+                The selected facility could not be fetched from the backend. Try
+                another result or restart the API server.
+              </p>
+              <p className="mt-3 font-mono text-[11px] text-text-muted">
+                {facilityError.message}
+              </p>
+            </div>
+          </div>
+        ) : facilityPending ? (
           <div className="flex h-full items-center justify-center">
             <Loader2 size={24} className="animate-spin text-trust-400" />
+          </div>
+        ) : (
+          <div className="flex h-full items-center justify-center">
+            <p className="text-small text-text-muted">Select a facility to view evidence.</p>
           </div>
         )}
       </SheetContent>

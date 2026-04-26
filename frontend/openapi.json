@@ -552,6 +552,77 @@
         }
       }
     },
+    "/portal/me": {
+      "get": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "Me",
+        "operationId": "me_portal_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortalMeResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/portal/logout": {
+      "post": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "Logout",
+        "operationId": "logout_portal_logout_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "boolean"
+                  },
+                  "type": "object",
+                  "title": "Response Logout Portal Logout Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/portal/token/refresh": {
       "post": {
         "tags": [
@@ -559,6 +630,16 @@
         ],
         "summary": "Refresh Token",
         "operationId": "refresh_token_portal_token_refresh_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -566,6 +647,61 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portal/password/change": {
+      "post": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "Change Password",
+        "operationId": "change_password_portal_password_change_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordChangeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "boolean"
+                  },
+                  "type": "object",
+                  "title": "Response Change Password Portal Password Change Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -739,6 +875,36 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/FacilityDashboardResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/portal/updates/fields": {
+      "get": {
+        "tags": [
+          "Facility Portal"
+        ],
+        "summary": "List Update Fields",
+        "operationId": "list_update_fields_portal_updates_fields_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/UpdateFieldMetadata"
+                  },
+                  "type": "array",
+                  "title": "Response List Update Fields Portal Updates Fields Get"
                 }
               }
             }
@@ -1354,6 +1520,12 @@
             "minimum": 0.0,
             "title": "Peer Anomaly Score"
           },
+          "inference_score": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Inference Score"
+          },
           "trust_score": {
             "type": "number",
             "maximum": 1.0,
@@ -1375,6 +1547,16 @@
             "type": "array",
             "title": "Citations"
           },
+          "inference_detail": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/InferenceResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "flags": {
             "items": {
               "type": "string"
@@ -1390,6 +1572,7 @@
           "self_consistency_score",
           "coherence_score",
           "peer_anomaly_score",
+          "inference_score",
           "trust_score",
           "confidence_interval_low",
           "confidence_interval_high",
@@ -2287,6 +2470,10 @@
             "type": "string",
             "title": "Facility Type"
           },
+          "normalization_version": {
+            "type": "string",
+            "title": "Normalization Version"
+          },
           "capabilities": {
             "items": {
               "$ref": "#/components/schemas/CapabilityClaim"
@@ -2323,6 +2510,7 @@
           "lat",
           "lon",
           "facility_type",
+          "normalization_version",
           "capabilities",
           "overall_trust_score",
           "extraction_run_ids",
@@ -2460,6 +2648,58 @@
         ],
         "title": "ImprovementSuggestion"
       },
+      "InferenceResult": {
+        "properties": {
+          "inferred_present": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inferred Present"
+          },
+          "inference_confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Inference Confidence"
+          },
+          "supporting_equipment": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Supporting Equipment"
+          },
+          "contradictions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Contradictions"
+          },
+          "inference_flags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Inference Flags"
+          }
+        },
+        "type": "object",
+        "required": [
+          "inferred_present",
+          "inference_confidence",
+          "supporting_equipment",
+          "contradictions",
+          "inference_flags"
+        ],
+        "title": "InferenceResult",
+        "description": "Equipment-to-capability inference details from the Truth Layer."
+      },
       "LoginRequest": {
         "properties": {
           "email": {
@@ -2477,6 +2717,112 @@
           "password"
         ],
         "title": "LoginRequest"
+      },
+      "Organization": {
+        "properties": {
+          "organization_id": {
+            "type": "string",
+            "title": "Organization Id"
+          },
+          "facility_id": {
+            "type": "string",
+            "title": "Facility Id"
+          },
+          "registration_id": {
+            "type": "string",
+            "title": "Registration Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "legal_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Legal Name"
+          },
+          "primary_email": {
+            "type": "string",
+            "title": "Primary Email"
+          },
+          "primary_phone": {
+            "type": "string",
+            "title": "Primary Phone"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "suspended"
+            ],
+            "title": "Status",
+            "default": "active"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "approved_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approved At"
+          },
+          "approved_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approved By"
+          }
+        },
+        "type": "object",
+        "required": [
+          "organization_id",
+          "facility_id",
+          "registration_id",
+          "name",
+          "primary_email",
+          "primary_phone",
+          "created_at"
+        ],
+        "title": "Organization",
+        "description": "A verified organization that owns one or more facility portal users."
+      },
+      "PasswordChangeRequest": {
+        "properties": {
+          "current_password": {
+            "type": "string",
+            "title": "Current Password"
+          },
+          "new_password": {
+            "type": "string",
+            "title": "New Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "current_password",
+          "new_password"
+        ],
+        "title": "PasswordChangeRequest"
       },
       "PinCodeDesert": {
         "properties": {
@@ -2556,6 +2902,149 @@
         ],
         "title": "PinCodeDesert",
         "description": "One row per (pin_code, capability) in `gold.pin_code_desert`."
+      },
+      "PortalMeResponse": {
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/PortalUser"
+          },
+          "organization": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Organization"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "user"
+        ],
+        "title": "PortalMeResponse"
+      },
+      "PortalUser": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "organization_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Organization Id"
+          },
+          "facility_id": {
+            "type": "string",
+            "title": "Facility Id"
+          },
+          "registration_id": {
+            "type": "string",
+            "title": "Registration Id"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "password_hash": {
+            "type": "string",
+            "title": "Password Hash"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "last_login": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Login"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active",
+            "default": true
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "org_owner",
+              "org_admin",
+              "org_editor",
+              "org_viewer",
+              "facility_admin",
+              "facility_viewer"
+            ],
+            "title": "Role",
+            "default": "org_owner"
+          },
+          "display_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "failed_login_attempts": {
+            "type": "integer",
+            "title": "Failed Login Attempts",
+            "default": 0
+          },
+          "locked_until": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locked Until"
+          },
+          "password_changed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Password Changed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "facility_id",
+          "registration_id",
+          "email",
+          "password_hash",
+          "created_at"
+        ],
+        "title": "PortalUser",
+        "description": "An authenticated facility representative with portal access."
       },
       "ProofMedia": {
         "properties": {
@@ -2858,6 +3347,19 @@
         "title": "QueryResponse",
         "description": "The thing the (eventual) frontend renders."
       },
+      "RefreshTokenRequest": {
+        "properties": {
+          "refresh_token": {
+            "type": "string",
+            "title": "Refresh Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "refresh_token"
+        ],
+        "title": "RefreshTokenRequest"
+      },
       "RegistrationCreate": {
         "properties": {
           "facility_name": {
@@ -3082,6 +3584,10 @@
             "type": "number",
             "title": "Peer Anomaly Score"
           },
+          "inference_score": {
+            "type": "number",
+            "title": "Inference Score"
+          },
           "trust_score": {
             "type": "number",
             "title": "Trust Score"
@@ -3097,6 +3603,13 @@
           "confidence_interval_width": {
             "type": "number",
             "title": "Confidence Interval Width"
+          },
+          "inference_contradictions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Inference Contradictions"
           },
           "flags": {
             "items": {
@@ -3117,6 +3630,7 @@
           "self_consistency_score",
           "coherence_score",
           "peer_anomaly_score",
+          "inference_score",
           "trust_score",
           "confidence_interval_low",
           "confidence_interval_high",
@@ -3131,6 +3645,10 @@
             "type": "string",
             "title": "Access Token"
           },
+          "refresh_token": {
+            "type": "string",
+            "title": "Refresh Token"
+          },
           "token_type": {
             "type": "string",
             "title": "Token Type",
@@ -3140,9 +3658,17 @@
             "type": "integer",
             "title": "Expires In Seconds"
           },
+          "refresh_expires_in_seconds": {
+            "type": "integer",
+            "title": "Refresh Expires In Seconds"
+          },
           "facility_id": {
             "type": "string",
             "title": "Facility Id"
+          },
+          "organization_id": {
+            "type": "string",
+            "title": "Organization Id"
           },
           "user_id": {
             "type": "string",
@@ -3151,19 +3677,31 @@
           "role": {
             "type": "string",
             "enum": [
+              "org_owner",
+              "org_admin",
+              "org_editor",
+              "org_viewer",
               "facility_admin",
               "facility_viewer"
             ],
             "title": "Role"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
           }
         },
         "type": "object",
         "required": [
           "access_token",
+          "refresh_token",
           "expires_in_seconds",
+          "refresh_expires_in_seconds",
           "facility_id",
+          "organization_id",
           "user_id",
-          "role"
+          "role",
+          "email"
         ],
         "title": "TokenResponse"
       },
@@ -3383,6 +3921,60 @@
           "nodes"
         ],
         "title": "TraceTimelineResponse"
+      },
+      "UpdateFieldMetadata": {
+        "properties": {
+          "field_name": {
+            "type": "string",
+            "title": "Field Name"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "contact",
+              "address",
+              "profile",
+              "operational",
+              "clinical",
+              "equipment",
+              "capability"
+            ],
+            "title": "Category"
+          },
+          "requires_proof": {
+            "type": "boolean",
+            "title": "Requires Proof"
+          },
+          "value_type": {
+            "type": "string",
+            "title": "Value Type"
+          },
+          "source_field_name": {
+            "type": "string",
+            "title": "Source Field Name"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "examples": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Examples"
+          }
+        },
+        "type": "object",
+        "required": [
+          "field_name",
+          "category",
+          "requires_proof",
+          "value_type",
+          "source_field_name",
+          "description"
+        ],
+        "title": "UpdateFieldMetadata"
       },
       "UpdateRequest": {
         "properties": {

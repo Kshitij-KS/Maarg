@@ -1,6 +1,7 @@
 import type { components } from "./types.generated";
 
 export type Citation = components["schemas"]["Citation"];
+export type InferenceResult = components["schemas"]["InferenceResult"];
 export type CapabilityClaim = components["schemas"]["CapabilityClaim"];
 export type FacilityTrustRecord = components["schemas"]["FacilityTrustRecord"];
 export type PinCodeDesert = components["schemas"]["PinCodeDesert"];
@@ -25,10 +26,12 @@ export type SignalBreakdown = {
   self_consistency_score: number;
   coherence_score: number;
   peer_anomaly_score: number;
+  inference_score: number;
   trust_score: number;
   confidence_interval_low: number;
   confidence_interval_high: number;
   confidence_interval_width: number;
+  inference_contradictions?: string[];
   flags: string[];
   citation_count: number;
 };
@@ -121,21 +124,27 @@ export type TraceTimelineResponse = {
  */
 export const CAPABILITIES = [
   "emergency_obstetric_care",
+  "emergency_trauma",
+  "advanced_surgery",
   "c_section",
   "anesthesiologist_coverage",
   "dialysis",
   "icu",
+  "neonatal_icu",
   "nicu",
 ] as const;
 
 export type Capability = (typeof CAPABILITIES)[number];
 
 export const CAPABILITY_LABELS: Record<Capability, string> = {
-  emergency_obstetric_care: "Emergency Obstetric",
+  emergency_obstetric_care: "Emergency OB Care",
+  emergency_trauma: "Emergency Trauma",
+  advanced_surgery: "Advanced Surgery",
   c_section: "C-Section",
   anesthesiologist_coverage: "Anesthesiologist",
   dialysis: "Dialysis",
   icu: "ICU",
+  neonatal_icu: "Neonatal ICU",
   nicu: "NICU",
 };
 

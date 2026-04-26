@@ -6,6 +6,7 @@ import { useCallback, useRef, useState } from "react";
 import Map, { Marker, NavigationControl, type MapRef } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 
+import { desertMarkerKey } from "@/lib/map-markers";
 import { useUIStore } from "@/lib/stores/use-ui-store";
 import type { FacilityTrustRecord, PinCodeDesert } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -243,9 +244,9 @@ export function MapView({
 
         {/* Desert heatmap overlays */}
         {showDeserts &&
-          deserts.map((d) => (
+          deserts.map((d, index) => (
             <Marker
-              key={`desert-${d.pin_code}-${d.capability}`}
+              key={desertMarkerKey(d, index)}
               latitude={d.lat}
               longitude={d.lon}
               anchor="center"

@@ -50,7 +50,12 @@ export function CriticVerdictCard({
   const meta = VERDICT_COPY[verdict];
   const { Icon } = meta;
   const [timelineOpen, setTimelineOpen] = useState(false);
-  const { data: timeline, isPending } = useQuery({
+  const {
+    data: timeline,
+    isPending,
+    isError: timelineIsError,
+    error: timelineError,
+  } = useQuery({
     queryKey: ["trace-timeline", traceId],
     queryFn: () => getTraceTimeline(traceId),
     enabled: timelineOpen,
@@ -125,7 +130,23 @@ export function CriticVerdictCard({
             )}
             Reasoning timeline
           </button>
-          {timelineOpen && timeline ? (
+          {timelineOpen && timelineIsError ? (
+            <div
+              role="alert"
+              className="mt-3 rounded-xl border border-warn-400/30 bg-warn-glow px-3 py-2"
+            >
+              <p className="text-small font-medium text-warn-200">
+                Could not load reasoning timeline
+              </p>
+              <p className="mt-1 text-small text-text-secondary">
+                The trace endpoint failed. The search result is still usable, but
+                MLflow/fallback trace details are unavailable.
+              </p>
+              <p className="mt-2 font-mono text-[11px] text-text-muted">
+                {timelineError.message}
+              </p>
+            </div>
+          ) : timelineOpen && timeline ? (
             <div className="mt-3 space-y-2 border-t border-border-subtle pt-3">
               {timeline.found ? (
                 timeline.nodes.slice(0, 6).map((node) => (

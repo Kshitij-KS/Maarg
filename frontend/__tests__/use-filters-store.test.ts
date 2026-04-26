@@ -5,6 +5,7 @@ import {
   selectFilterPayload,
   useFiltersStore,
 } from "@/lib/stores/use-filters-store";
+import { CAPABILITIES, CAPABILITY_LABELS } from "@/lib/types";
 
 beforeEach(() => {
   useFiltersStore.setState({ ...FILTERS_INITIAL });
@@ -64,6 +65,21 @@ describe("useFiltersStore", () => {
     expect(state.maxDistanceKm).toBe(75);
     expect(state.minTrust).toBe(0.6);
     expect(state.capabilities).toEqual(["c_section"]);
+  });
+
+  it("supports Truth Layer P0 capability labels without raw snake_case fallback", () => {
+    expect(CAPABILITIES).toEqual(
+      expect.arrayContaining([
+        "advanced_surgery",
+        "emergency_obstetric_care",
+        "neonatal_icu",
+        "dialysis",
+        "emergency_trauma",
+      ]),
+    );
+    expect(CAPABILITY_LABELS.advanced_surgery).toBe("Advanced Surgery");
+    expect(CAPABILITY_LABELS.neonatal_icu).toBe("Neonatal ICU");
+    expect(CAPABILITY_LABELS.emergency_trauma).toBe("Emergency Trauma");
   });
 
   it("selectFilterPayload returns exactly four facet keys", () => {

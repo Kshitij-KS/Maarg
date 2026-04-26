@@ -12,16 +12,14 @@ import { Badge } from "@/components/ui/badge";
 import { getDesertRows, getDesertSummary, queryFacilities } from "@/lib/api";
 import { fadeInUp, stagger } from "@/lib/motion";
 import { useFiltersStore } from "@/lib/stores/use-filters-store";
-import type { DesertSummary } from "@/lib/types";
+import { CAPABILITIES, CAPABILITY_LABELS, type DesertSummary } from "@/lib/types";
 
 const CAPABILITY_OPTIONS = [
   { value: "", label: "All capabilities" },
-  { value: "emergency_obstetric_care", label: "Emergency OB care" },
-  { value: "c_section", label: "C-Section" },
-  { value: "dialysis", label: "Dialysis" },
-  { value: "icu", label: "ICU" },
-  { value: "nicu", label: "NICU" },
-  { value: "anesthesiologist_coverage", label: "Anesthesiologist" },
+  ...CAPABILITIES.map((capability) => ({
+    value: capability,
+    label: CAPABILITY_LABELS[capability],
+  })),
 ];
 
 function DesertStatCard({

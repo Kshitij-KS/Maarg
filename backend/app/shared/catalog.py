@@ -62,13 +62,16 @@ def _load_json_records(path: Path, model: type[T]) -> list[T]:
     return [model.model_validate(row) for row in payload]
 
 
-def load_facility_trust() -> list[FacilityTrustRecord]:
+def load_facility_trust(*, limit: int | None = None) -> list[FacilityTrustRecord]:
     """Load `gold.facility_trust` through the mock/real switch."""
 
     if use_mock_gold():
-        return _load_json_records(MOCK_FACILITY_TRUST_PATH, FacilityTrustRecord)
+        rows = _load_json_records(MOCK_FACILITY_TRUST_PATH, FacilityTrustRecord)
+        return rows[:limit] if limit is not None else rows
     try:
-        return validate_facility_rows(DatabricksGoldCatalog().load_facility_trust())
+        return validate_facility_rows(
+            DatabricksGoldCatalog().load_facility_trust(limit=limit)
+        )
     except Exception as exc:
         LOGGER.warning("Databricks facility Gold load failed; falling back to mock: %s", exc)
         return _load_json_records(MOCK_FACILITY_TRUST_PATH, FacilityTrustRecord)

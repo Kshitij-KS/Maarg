@@ -23,7 +23,7 @@ def _facility_row() -> dict:
 
 def test_real_mode_loads_facility_trust_from_databricks(monkeypatch) -> None:
     class FakeDatabricksGoldCatalog:
-        def load_facility_trust(self):
+        def load_facility_trust(self, *, limit: int | None = None):
             return [_facility_row()]
 
     monkeypatch.setenv("HACKATHON_MODE", "real")
@@ -37,7 +37,7 @@ def test_real_mode_loads_facility_trust_from_databricks(monkeypatch) -> None:
 
 def test_real_mode_falls_back_to_mock_when_databricks_fails(monkeypatch) -> None:
     class FailingDatabricksGoldCatalog:
-        def load_facility_trust(self):
+        def load_facility_trust(self, *, limit: int | None = None):
             raise RuntimeError("warehouse unavailable")
 
     monkeypatch.setenv("HACKATHON_MODE", "real")

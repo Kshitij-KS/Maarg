@@ -14,8 +14,8 @@ def mode() -> str:
     return current_mode()
 
 
-def facilities() -> list[FacilityTrustRecord]:
-    return load_facility_trust()
+def facilities(*, limit: int | None = None) -> list[FacilityTrustRecord]:
+    return load_facility_trust(limit=limit)
 
 
 def facility_by_id(facility_id: str) -> FacilityTrustRecord | None:

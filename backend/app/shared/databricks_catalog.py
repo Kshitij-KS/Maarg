@@ -12,13 +12,21 @@ class DatabricksGoldCatalog:
     def __init__(self) -> None:
         self.settings = get_settings()
 
-    def load_facility_trust(self) -> list[dict[str, Any]]:
-        return self._query_table(self.settings.databricks_facility_trust_table_full_name)
+    def load_facility_trust(self, *, limit: int | None = None) -> list[dict[str, Any]]:
+        return self._query_table(
+            self.settings.databricks_facility_trust_table_full_name,
+            limit=limit,
+        )
 
     def load_pin_desert(self) -> list[dict[str, Any]]:
         return self._query_table(self.settings.databricks_pin_desert_table_full_name)
 
-    def _query_table(self, table_name: str) -> list[dict[str, Any]]:
+    def _query_table(
+        self,
+        table_name: str,
+        *,
+        limit: int | None = None,
+    ) -> list[dict[str, Any]]:
         if not self.settings.databricks_configured:
             raise RuntimeError(
                 "Databricks real mode requires DATABRICKS_SERVER_HOSTNAME, "
@@ -41,7 +49,10 @@ class DatabricksGoldCatalog:
             access_token=self.settings.databricks_token,
         ) as connection:
             with connection.cursor() as cursor:
-                cursor.execute(f"SELECT * FROM {table_name}")
+                query = f"SELECT * FROM {table_name}"
+                if limit is not None:
+                    query = f"{query} LIMIT {max(1, limit)}"
+                cursor.execute(query)
                 columns = [column[0] for column in cursor.description]
                 return [_normalize_row(columns, row) for row in cursor.fetchall()]
 

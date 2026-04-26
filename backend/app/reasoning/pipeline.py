@@ -43,8 +43,8 @@ class ReasoningPipeline:
         routed = self._llm_parse_or_fallback(routed)
         candidates = self.geo_reasoner.find_candidates(routed)
         citations = {
-            candidate.facility_id: self.vector_client.citations_for(
-                candidate.facility_id, routed.text
+            candidate.facility_id: self.vector_client.citations_from_facility(
+                candidate, routed.text
             )
             for candidate in candidates
         }

@@ -255,17 +255,13 @@ export function MapView({
             </Marker>
           ))}
 
-        {/* Facility markers */}
+        {/* Facility markers — onClick only on the inner button to avoid double-fire */}
         {facilities.map((facility) => (
           <Marker
             key={facility.facility_id}
             latitude={facility.lat}
             longitude={facility.lon}
             anchor="bottom"
-            onClick={(e) => {
-              e.originalEvent.stopPropagation();
-              handleMarkerClick(facility);
-            }}
           >
             <FacilityPin
               facility={facility}

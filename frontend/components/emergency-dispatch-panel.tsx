@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, Copy, Headphones, Loader2, Phone, Radio } from "lucide-react";
+import { CheckCircle2, Copy, Headphones, Loader2, Phone, Radio, Siren } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -10,12 +10,13 @@ import {
   canSpeakInBrowser,
   type RankedEmergencyFacility,
 } from "@/lib/emergency-dispatch-agent";
+import { MockCallAgent } from "@/components/mock-call-agent";
 import { getContact } from "@/lib/facility-contacts";
 import { formatDistanceKm } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-type Phase = "handshake" | "ready";
+type Phase = "handshake" | "ready" | "calling";
 
 function speakText(text: string, lang: string) {
   if (!canSpeakInBrowser()) {
@@ -102,9 +103,21 @@ export function EmergencyDispatchPanel({ cityLabel, lat, lon, facilities, onDone
         <Loader2 className="h-10 w-10 animate-spin text-trust-400" aria-hidden />
         <p className="text-center text-sm font-medium text-text-primary">Maarg dispatch agent is preparing your briefing…</p>
         <p className="text-center text-xs text-text-muted">
-          You will get a read-aloud script, then call the hospital ambulance desk on your phone.
+          Simulate a full emergency call or read the verbal briefing to call the hospital yourself.
         </p>
       </div>
+    );
+  }
+
+  if (phase === "calling") {
+    return (
+      <MockCallAgent
+        facility={primary}
+        lat={lat}
+        lon={lon}
+        cityLabel={cityLabel}
+        onEnd={() => setPhase("ready")}
+      />
     );
   }
 
@@ -120,6 +133,19 @@ export function EmergencyDispatchPanel({ cityLabel, lat, lon, facilities, onDone
           {formatDistanceKm(primary.distanceKm)} · desk {primary.dispatchPhoneLabel}
         </p>
       </div>
+
+      {/* Primary action — simulated emergency call */}
+      <button
+        type="button"
+        onClick={() => setPhase("calling")}
+        className={cn(
+          "flex w-full items-center justify-center gap-2.5 rounded-2xl bg-danger-500 px-4 py-4 text-base font-semibold text-white shadow-lg",
+          "transition-transform hover:scale-[1.01] active:scale-[0.99]",
+        )}
+      >
+        <Siren className="h-5 w-5" />
+        Simulate Emergency Call — SOS + Location + Ambulance Request
+      </button>
 
       <div className="max-h-48 overflow-y-auto rounded-xl border border-border-subtle bg-surface-elevated/30 p-3 text-sm leading-relaxed text-text-secondary">
         {briefing.lines.map((line, i) => (
@@ -157,12 +183,12 @@ export function EmergencyDispatchPanel({ cityLabel, lat, lon, facilities, onDone
       <a
         href={telPrimary}
         className={cn(
-          "flex w-full items-center justify-center gap-2 rounded-2xl bg-danger-500 px-4 py-4 text-base font-semibold text-white shadow-lg",
-          "transition-transform hover:scale-[1.01] active:scale-[0.99]",
+          "flex w-full items-center justify-center gap-2 rounded-2xl border border-danger-500/30 bg-danger-500/10 px-4 py-3 text-sm font-semibold text-danger-400",
+          "transition-colors hover:bg-danger-500/15",
         )}
       >
-        <Phone className="h-5 w-5" fill="currentColor" />
-        Call {primary.facility_name} — ambulance desk
+        <Phone className="h-4 w-4" fill="currentColor" />
+        Real call — {primary.facility_name} ambulance desk
       </a>
 
       {alternates.length > 0 ? (
@@ -185,8 +211,7 @@ export function EmergencyDispatchPanel({ cityLabel, lat, lon, facilities, onDone
       ) : null}
 
       <p className="text-center text-xs text-text-muted">
-        Maarg does not place the call for you. This briefing helps you ask the hospital clearly for an ambulance at your
-        coordinates. For danger to life, also call 112.
+        The simulated call demonstrates the SOS flow. For a real emergency, use the call button above or dial 112.
       </p>
 
       <button

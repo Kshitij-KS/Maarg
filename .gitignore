@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# Editor / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local secrets
+.env
+.env.local
+
+# MLflow local store
+mlruns/
+mlartifacts/
+
+# Demo runner output (committed selectively)
+outputs/*.json
+!outputs/hour8_smoke.json
+!outputs/.gitkeep
+
+# Generated / fallback fixtures
+fixtures/seed_*.json

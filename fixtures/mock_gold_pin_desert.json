@@ -1,0 +1,122 @@
+[
+  {
+    "pin_code": "852113",
+    "state": "Bihar",
+    "district": "Madhepura",
+    "lat": 25.92,
+    "lon": 86.79,
+    "population": 184900,
+    "capability": "emergency_obstetric_care",
+    "nearest_verified_facility_id": "F00001",
+    "distance_km": 3.2,
+    "desert_score": 0.18
+  },
+  {
+    "pin_code": "852113",
+    "state": "Bihar",
+    "district": "Madhepura",
+    "lat": 25.92,
+    "lon": 86.79,
+    "population": 184900,
+    "capability": "dialysis",
+    "nearest_verified_facility_id": "F00042",
+    "distance_km": 1.9,
+    "desert_score": 0.32
+  },
+  {
+    "pin_code": "852128",
+    "state": "Bihar",
+    "district": "Madhepura",
+    "lat": 26.03,
+    "lon": 86.76,
+    "population": 87500,
+    "capability": "emergency_obstetric_care",
+    "nearest_verified_facility_id": "F00001",
+    "distance_km": 15.1,
+    "desert_score": 0.51
+  },
+  {
+    "pin_code": "852201",
+    "state": "Bihar",
+    "district": "Saharsa",
+    "lat": 25.88,
+    "lon": 86.6,
+    "population": 210000,
+    "capability": "emergency_obstetric_care",
+    "nearest_verified_facility_id": "F00002",
+    "distance_km": 2.5,
+    "desert_score": 0.39
+  },
+  {
+    "pin_code": "854301",
+    "state": "Bihar",
+    "district": "Purnea",
+    "lat": 25.78,
+    "lon": 87.47,
+    "population": 295000,
+    "capability": "emergency_obstetric_care",
+    "nearest_verified_facility_id": "F00003",
+    "distance_km": 4.0,
+    "desert_score": 0.22
+  },
+  {
+    "pin_code": "854301",
+    "state": "Bihar",
+    "district": "Purnea",
+    "lat": 25.78,
+    "lon": 87.47,
+    "population": 295000,
+    "capability": "nicu",
+    "nearest_verified_facility_id": "F00003",
+    "distance_km": 4.0,
+    "desert_score": 0.27
+  },
+  {
+    "pin_code": "852101",
+    "state": "Bihar",
+    "district": "Supaul",
+    "lat": 26.12,
+    "lon": 86.6,
+    "population": 162000,
+    "capability": "emergency_obstetric_care",
+    "nearest_verified_facility_id": "F00001",
+    "distance_km": 38.7,
+    "desert_score": 0.68
+  },
+  {
+    "pin_code": "855107",
+    "state": "Bihar",
+    "district": "Kishanganj",
+    "lat": 26.1,
+    "lon": 87.95,
+    "population": 128000,
+    "capability": "emergency_obstetric_care",
+    "nearest_verified_facility_id": null,
+    "distance_km": null,
+    "desert_score": 0.91
+  },
+  {
+    "pin_code": "848101",
+    "state": "Bihar",
+    "district": "Samastipur",
+    "lat": 25.86,
+    "lon": 85.78,
+    "population": 305000,
+    "capability": "dialysis",
+    "nearest_verified_facility_id": null,
+    "distance_km": null,
+    "desert_score": 0.86
+  },
+  {
+    "pin_code": "800001",
+    "state": "Bihar",
+    "district": "Patna",
+    "lat": 25.61,
+    "lon": 85.14,
+    "population": 690000,
+    "capability": "emergency_obstetric_care",
+    "nearest_verified_facility_id": "F00003",
+    "distance_km": 180.0,
+    "desert_score": 0.42
+  }
+]

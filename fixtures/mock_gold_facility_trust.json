@@ -1,0 +1,358 @@
+[
+  {
+    "facility_id": "F00001",
+    "facility_name": "Madhepura District Hospital",
+    "pin_code": "852113",
+    "state": "Bihar",
+    "district": "Madhepura",
+    "lat": 25.921,
+    "lon": 86.792,
+    "facility_type": "District Hospital",
+    "capabilities": [
+      {
+        "capability": "emergency_obstetric_care",
+        "claim_present": true,
+        "self_consistency_score": 0.9400000000000001,
+        "coherence_score": 0.92,
+        "peer_anomaly_score": 0.89,
+        "trust_score": 0.92,
+        "confidence_interval_low": 0.8,
+        "confidence_interval_high": 1.0,
+        "citations": [
+          {
+            "source_field": "free_text_notes",
+            "sentence": "Emergency obstetric care is available 24x7 with operating theatre support.",
+            "char_start": 0,
+            "char_end": 74
+          }
+        ],
+        "flags": []
+      },
+      {
+        "capability": "c_section",
+        "claim_present": true,
+        "self_consistency_score": 0.93,
+        "coherence_score": 0.91,
+        "peer_anomaly_score": 0.88,
+        "trust_score": 0.91,
+        "confidence_interval_low": 0.79,
+        "confidence_interval_high": 0.99,
+        "citations": [
+          {
+            "source_field": "free_text_notes",
+            "sentence": "Emergency OT supports C-section procedures around the clock.",
+            "char_start": 0,
+            "char_end": 60
+          }
+        ],
+        "flags": []
+      },
+      {
+        "capability": "anesthesiologist_coverage",
+        "claim_present": true,
+        "self_consistency_score": 0.9,
+        "coherence_score": 0.88,
+        "peer_anomaly_score": 0.85,
+        "trust_score": 0.88,
+        "confidence_interval_low": 0.76,
+        "confidence_interval_high": 0.96,
+        "citations": [
+          {
+            "source_field": "free_text_notes",
+            "sentence": "Anesthesiologist is on call for emergency C-section cases.",
+            "char_start": 0,
+            "char_end": 58
+          }
+        ],
+        "flags": []
+      },
+      {
+        "capability": "dialysis",
+        "claim_present": true,
+        "self_consistency_score": 0.8,
+        "coherence_score": 0.78,
+        "peer_anomaly_score": 0.75,
+        "trust_score": 0.78,
+        "confidence_interval_low": 0.66,
+        "confidence_interval_high": 0.86,
+        "citations": [
+          {
+            "source_field": "free_text_notes",
+            "sentence": "Dialysis unit runs six days per week.",
+            "char_start": 0,
+            "char_end": 37
+          }
+        ],
+        "flags": []
+      }
+    ],
+    "overall_trust_score": 0.9,
+    "extraction_run_ids": [
+      "mock-run-001"
+    ],
+    "last_updated": "2026-04-26T00:00:00Z"
+  },
+  {
+    "facility_id": "F00002",
+    "facility_name": "Saharsa Medical Centre",
+    "pin_code": "852201",
+    "state": "Bihar",
+    "district": "Saharsa",
+    "lat": 25.883,
+    "lon": 86.597,
+    "facility_type": "Private Hospital",
+    "capabilities": [
+      {
+        "capability": "c_section",
+        "claim_present": true,
+        "self_consistency_score": 0.88,
+        "coherence_score": 0.86,
+        "peer_anomaly_score": 0.83,
+        "trust_score": 0.86,
+        "confidence_interval_low": 0.74,
+        "confidence_interval_high": 0.94,
+        "citations": [
+          {
+            "source_field": "free_text_notes",
+            "sentence": "Facility record states c section is available.",
+            "char_start": 0,
+            "char_end": 46
+          }
+        ],
+        "flags": []
+      },
+      {
+        "capability": "emergency_obstetric_care",
+        "claim_present": true,
+        "self_consistency_score": 0.86,
+        "coherence_score": 0.84,
+        "peer_anomaly_score": 0.8099999999999999,
+        "trust_score": 0.84,
+        "confidence_interval_low": 0.72,
+        "confidence_interval_high": 0.9199999999999999,
+        "citations": [
+          {
+            "source_field": "free_text_notes",
+            "sentence": "Facility record states emergency obstetric care is available.",
+            "char_start": 0,
+            "char_end": 61
+          }
+        ],
+        "flags": []
+      },
+      {
+        "capability": "anesthesiologist_coverage",
+        "claim_present": false,
+        "self_consistency_score": 0.43,
+        "coherence_score": 0.41,
+        "peer_anomaly_score": 0.38,
+        "trust_score": 0.41,
+        "confidence_interval_low": 0.29,
+        "confidence_interval_high": 0.49,
+        "citations": [
+          {
+            "source_field": "free_text_notes",
+            "sentence": "No full-time anesthesiologist is listed in the staffing notes.",
+            "char_start": 0,
+            "char_end": 62
+          }
+        ],
+        "flags": [
+          "MISSING_ANESTHESIOLOGIST"
+        ]
+      }
+    ],
+    "overall_trust_score": 0.74,
+    "extraction_run_ids": [
+      "mock-run-001"
+    ],
+    "last_updated": "2026-04-26T00:00:00Z"
+  },
+  {
+    "facility_id": "F00003",
+    "facility_name": "Purnea City Hospital",
+    "pin_code": "854301",
+    "state": "Bihar",
+    "district": "Purnea",
+    "lat": 25.777,
+    "lon": 87.475,
+    "facility_type": "Multi-specialty Hospital",
+    "capabilities": [
+      {
+        "capability": "emergency_obstetric_care",
+        "claim_present": true,
+        "self_consistency_score": 0.89,
+        "coherence_score": 0.87,
+        "peer_anomaly_score": 0.84,
+        "trust_score": 0.87,
+        "confidence_interval_low": 0.75,
+        "confidence_interval_high": 0.95,
+        "citations": [
+          {
+            "source_field": "free_text_notes",
+            "sentence": "Facility record states emergency obstetric care is available.",
+            "char_start": 0,
+            "char_end": 61
+          }
+        ],
+        "flags": []
+      },
+      {
+        "capability": "c_section",
+        "claim_present": true,
+        "self_consistency_score": 0.92,
+        "coherence_score": 0.9,
+        "peer_anomaly_score": 0.87,
+        "trust_score": 0.9,
+        "confidence_interval_low": 0.78,
+        "confidence_interval_high": 0.98,
+        "citations": [
+          {
+            "source_field": "free_text_notes",
+            "sentence": "Facility record states c section is available.",
+            "char_start": 0,
+            "char_end": 46
+          }
+        ],
+        "flags": []
+      },
+      {
+        "capability": "anesthesiologist_coverage",
+        "claim_present": true,
+        "self_consistency_score": 0.91,
+        "coherence_score": 0.89,
+        "peer_anomaly_score": 0.86,
+        "trust_score": 0.89,
+        "confidence_interval_low": 0.77,
+        "confidence_interval_high": 0.97,
+        "citations": [
+          {
+            "source_field": "free_text_notes",
+            "sentence": "Facility record states anesthesiologist coverage is available.",
+            "char_start": 0,
+            "char_end": 62
+          }
+        ],
+        "flags": []
+      },
+      {
+        "capability": "nicu",
+        "claim_present": true,
+        "self_consistency_score": 0.84,
+        "coherence_score": 0.82,
+        "peer_anomaly_score": 0.7899999999999999,
+        "trust_score": 0.82,
+        "confidence_interval_low": 0.7,
+        "confidence_interval_high": 0.8999999999999999,
+        "citations": [
+          {
+            "source_field": "free_text_notes",
+            "sentence": "Facility record states nicu is available.",
+            "char_start": 0,
+            "char_end": 41
+          }
+        ],
+        "flags": []
+      }
+    ],
+    "overall_trust_score": 0.88,
+    "extraction_run_ids": [
+      "mock-run-001"
+    ],
+    "last_updated": "2026-04-26T00:00:00Z"
+  },
+  {
+    "facility_id": "F00042",
+    "facility_name": "Kosi Dialysis and Critical Care",
+    "pin_code": "852113",
+    "state": "Bihar",
+    "district": "Madhepura",
+    "lat": 25.913,
+    "lon": 86.806,
+    "facility_type": "Specialty Clinic",
+    "capabilities": [
+      {
+        "capability": "dialysis",
+        "claim_present": true,
+        "self_consistency_score": 0.8,
+        "coherence_score": 0.78,
+        "peer_anomaly_score": 0.75,
+        "trust_score": 0.78,
+        "confidence_interval_low": 0.66,
+        "confidence_interval_high": 0.86,
+        "citations": [
+          {
+            "source_field": "free_text_notes",
+            "sentence": "Dialysis capability is reported with two functional hemodialysis machines.",
+            "char_start": 0,
+            "char_end": 74
+          }
+        ],
+        "flags": []
+      },
+      {
+        "capability": "icu",
+        "claim_present": true,
+        "self_consistency_score": 0.6900000000000001,
+        "coherence_score": 0.67,
+        "peer_anomaly_score": 0.64,
+        "trust_score": 0.67,
+        "confidence_interval_low": 0.55,
+        "confidence_interval_high": 0.75,
+        "citations": [
+          {
+            "source_field": "free_text_notes",
+            "sentence": "Facility record states icu is available.",
+            "char_start": 0,
+            "char_end": 40
+          }
+        ],
+        "flags": []
+      }
+    ],
+    "overall_trust_score": 0.76,
+    "extraction_run_ids": [
+      "mock-run-001"
+    ],
+    "last_updated": "2026-04-26T00:00:00Z"
+  },
+  {
+    "facility_id": "F00099",
+    "facility_name": "Rural Health Sub-Centre Singheshwar",
+    "pin_code": "852128",
+    "state": "Bihar",
+    "district": "Madhepura",
+    "lat": 26.032,
+    "lon": 86.755,
+    "facility_type": "Sub-Centre",
+    "capabilities": [
+      {
+        "capability": "emergency_obstetric_care",
+        "claim_present": false,
+        "self_consistency_score": 0.35000000000000003,
+        "coherence_score": 0.33,
+        "peer_anomaly_score": 0.30000000000000004,
+        "trust_score": 0.33,
+        "confidence_interval_low": 0.21000000000000002,
+        "confidence_interval_high": 0.41000000000000003,
+        "citations": [
+          {
+            "source_field": "free_text_notes",
+            "sentence": "Sub-centre provides antenatal checkups but refers delivery complications.",
+            "char_start": 0,
+            "char_end": 73
+          }
+        ],
+        "flags": [
+          "LOW_CONFIDENCE",
+          "NO_C_SECTION"
+        ]
+      }
+    ],
+    "overall_trust_score": 0.42,
+    "extraction_run_ids": [
+      "mock-run-001"
+    ],
+    "last_updated": "2026-04-26T00:00:00Z"
+  }
+]

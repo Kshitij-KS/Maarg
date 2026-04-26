@@ -1,0 +1,13 @@
+[
+  {
+    "update_id": "demo-update-equipment-f00002",
+    "facility_id": "F00002",
+    "field_name": "equipment",
+    "new_value": "[\"operating theatre\", \"anesthesia machine\"]",
+    "approved_at": "2026-04-26T06:50:00Z",
+    "approved_by": "portal_admin",
+    "proof_verified": true,
+    "ingested": false,
+    "ingestion_run_id": null
+  }
+]

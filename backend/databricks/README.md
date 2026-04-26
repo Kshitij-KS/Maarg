@@ -47,6 +47,11 @@ Databricks SQL editor or a SQL Warehouse. It creates:
 - `maarg.truth_layer.gold_facility_trust`
 - `maarg.truth_layer.gold_pin_desert`
 
+Important: when creating the Bronze table from a file in a Unity Catalog Volume,
+use `read_files('/Volumes/...')` to create a managed Delta table. The `dbfs:`
+prefix works for some CLI copy commands, but Unity Catalog table creation
+rejects it.
+
 ## 5. Build Gold Tables
 
 Run `databricks/build_gold_tables.py` as a Databricks Python job or notebook in

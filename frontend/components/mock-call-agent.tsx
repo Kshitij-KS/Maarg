@@ -101,7 +101,7 @@ export function MockCallAgent({ facility, lat, lon, cityLabel, onEnd }: Props) {
                 <div
                   className={`max-w-[88%] rounded-2xl px-3 py-2 text-sm leading-snug ${
                     msg.from === "agent"
-                      ? "bg-trust-500/15 text-trust-100"
+                      ? "bg-trust-500/15 text-trust-600 dark:text-trust-200"
                       : "border border-border-default bg-surface-raised text-text-primary"
                   }`}
                 >
@@ -149,7 +149,7 @@ export function MockCallAgent({ facility, lat, lon, cityLabel, onEnd }: Props) {
             <p className="mt-1 flex items-center justify-center gap-1.5 text-sm text-text-secondary">
               <Clock className="h-4 w-4" />
               Estimated arrival:{" "}
-              <span className="font-bold text-success-400">{etaMinutes} minutes</span>
+              <span className="font-bold text-success-500">{etaMinutes} minutes</span>
             </p>
             <p className="mt-0.5 flex items-center justify-center gap-1 text-xs text-text-muted">
               <MapPin className="h-3 w-3" />
@@ -189,7 +189,7 @@ function CallStatusBar({
         transition={{ duration: 1.2, repeat: Infinity }}
         className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${
           phase === "confirmed"
-            ? "bg-success-500/15 text-success-400"
+            ? "bg-success-500/15 text-success-500"
             : "bg-danger-500/15 text-danger-400"
         }`}
       >
@@ -205,12 +205,12 @@ function CallStatusBar({
       <span
         className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${
           phase === "dialing"
-            ? "bg-warn-400/15 text-warn-300"
+            ? "bg-warn-400/15 text-warn-600 dark:text-warn-400"
             : phase === "connecting"
             ? "bg-trust-500/15 text-trust-200"
             : phase === "connected"
-            ? "animate-pulse bg-danger-500/20 text-danger-300"
-            : "bg-success-500/15 text-success-400"
+            ? "animate-pulse bg-danger-500/20 text-danger-400"
+            : "bg-success-500/15 text-success-500"
         }`}
       >
         {phase === "dialing" && "Dialing…"}

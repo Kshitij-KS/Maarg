@@ -38,9 +38,19 @@ app.include_router(contract.router)
 app.include_router(portal_router, prefix="/portal", tags=["Facility Portal"])
 
 
+@app.get("/", response_model=HealthResponse)
+@traced("api.root")
+def root() -> HealthResponse:
+    return _health_response()
+
+
 @app.get("/healthz", response_model=HealthResponse)
 @traced("api.healthz")
 def healthz() -> HealthResponse:
+    return _health_response()
+
+
+def _health_response() -> HealthResponse:
     current_mode = mode()
     set_trace_attributes({"mode": current_mode})
     return HealthResponse(ok=True, mode=current_mode)  # type: ignore[arg-type]

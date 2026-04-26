@@ -238,7 +238,7 @@ export default function Home() {
 
             <div className="space-y-3">
               {usingFallback ? (
-                <div className="rounded-2xl border border-warn-400/25 bg-warn-glow p-3 text-small text-warn-200">
+                <div className="rounded-2xl border border-warn-400/25 bg-warn-glow p-3 text-small text-warn-600 dark:text-warn-200">
                   Backend offline — showing canonical demo paths from local cache.
                 </div>
               ) : null}
@@ -267,7 +267,7 @@ export default function Home() {
                           {moment.endpoint}
                         </span>
                         {moment.target_facility_id ? (
-                          <span className="rounded-full border border-warn-400/25 bg-warn-glow px-2 py-0.5 font-mono text-[10px] text-warn-200">
+                          <span className="rounded-full border border-warn-400/25 bg-warn-glow px-2 py-0.5 font-mono text-[10px] text-warn-600 dark:text-warn-200">
                             {moment.target_facility_id}
                           </span>
                         ) : null}

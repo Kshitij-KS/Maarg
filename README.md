@@ -1,6 +1,5 @@
 # Maarg: The Healthcare Truth Layer for Critical Care Discovery
 
-> **This README is the team’s end-to-end hackathon submission document.** It tells the product story, the technical proof, what to run, what to show judges, and the exact text for portal fields. Treat it as the main dossier for anyone who lands on the repository.
 
 | | |
 | --- | --- |
@@ -306,18 +305,8 @@ We show **citation-backed** audit views, **reproducible** traces, **desert** vis
 
 **GitHub:** `https://github.com/Kshitij-KS/Maarg`  
 **Team ID:** `HN-9492`  
-**Live demo URL:** add your hosted URL when available; else “clone and run per README.”
+**Live demo URL:** https://maarg-ruby.vercel.app/
 
----
-
-## Hackathon submission checklist
-
-- [ ] **Demo video (~60s):** UX, home → search → audit or map.  
-- [ ] **Tech video (~60s):** agents, **MLflow**, **schema**, **mock vs Databricks**, **honest** limits (no autodial).  
-- [ ] **Play** both videos in the host portal.  
-- [ ] **Gallery:** UI still + **MLflow** or **trace** still.  
-- [ ] **Team photo** (landscape, clear faces).  
-- [ ] **Permissions** checkbox if required.  
 
 **Tags:** `FastAPI` `Next.js` `Python` `TypeScript` `MLflow` `healthcare` `reasoning` `audit` `maps` `Databricks-ready`
 

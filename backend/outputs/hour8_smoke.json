@@ -268,7 +268,7 @@
     },
     "critic_verdict": "partial",
     "critic_reasoning": "Candidate set is usable but needs evidence review because it includes flagged trust issues: F00002:anesthesiologist_coverage (MISSING_ANESTHESIOLOGIST)",
-    "trace_id": "tr-29ab727f6852a6aecd4dded8916d88e1"
+    "trace_id": "local-0e9ea135a75f42b69394dfe10b99088d"
   },
   "confidence_interval_audit": {
     "facility_id": "F00042",

@@ -3,13 +3,16 @@ CREATE SCHEMA IF NOT EXISTS maarg.truth_layer;
 CREATE VOLUME IF NOT EXISTS maarg.truth_layer.raw_uploads;
 
 CREATE TABLE IF NOT EXISTS maarg.truth_layer.bronze_facilities
-USING CSV
-OPTIONS (
-  path 'dbfs:/Volumes/maarg/truth_layer/raw_uploads/vf_hackathon_dataset_india_large.csv',
-  header 'true',
-  inferSchema 'true',
-  multiLine 'true',
-  escape '"'
+USING DELTA
+AS
+SELECT *
+FROM read_files(
+  '/Volumes/maarg/truth_layer/raw_uploads/vf_hackathon_dataset_india_large.csv',
+  format => 'csv',
+  header => true,
+  inferSchema => true,
+  multiLine => true,
+  escape => '"'
 );
 
 CREATE TABLE IF NOT EXISTS maarg.truth_layer.gold_facility_trust (

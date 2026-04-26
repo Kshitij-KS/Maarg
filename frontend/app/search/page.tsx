@@ -138,7 +138,7 @@ export default function SearchPage() {
     <>
       <motion.main
         variants={stagger(0.07)}
-        initial="hidden"
+        initial={false}
         animate="visible"
         className="mx-auto w-full max-w-7xl flex-1 px-6 py-7"
       >
@@ -183,7 +183,7 @@ export default function SearchPage() {
               </div>
               <motion.div
                 variants={stagger(0.04)}
-                initial="hidden"
+                initial={false}
                 animate="visible"
                 className="flex flex-wrap items-center gap-2"
               >
@@ -238,7 +238,7 @@ export default function SearchPage() {
             {hasQuery && isPending ? (
               <motion.div
                 variants={stagger(0.06)}
-                initial="hidden"
+                initial={false}
                 animate="visible"
                 className="space-y-3"
               >
@@ -254,7 +254,7 @@ export default function SearchPage() {
               <motion.div
                 key={data.trace_id}
                 variants={stagger(0.06)}
-                initial="hidden"
+                initial={false}
                 animate="visible"
                 className="space-y-4"
               >

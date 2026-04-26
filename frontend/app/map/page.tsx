@@ -103,7 +103,7 @@ export default function MapPage() {
     <>
       <motion.main
         variants={stagger(0.06)}
-        initial="hidden"
+        initial={false}
         animate="visible"
         className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-5 px-6 py-7"
       >

@@ -1,50 +1,39 @@
-# Local hackathon datasets
-*.xlsx
-*.xls
-*.csv
+```
+# Dependencies
+backend/hacknation_reasoning.egg-info/
+
+# Logs and temp files
+*.log
+*.tmp
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
 
 # Python
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
+*.pyc
+*.pyo
+*.pyd
 .Python
-*.egg-info/
-.eggs/
+*.so
+
+# Build directories
 build/
 dist/
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
+*.egg-info/
+
+# Coverage
 .coverage
 htmlcov/
+coverage/
 
-# Virtual envs
-.venv/
-venv/
-env/
-
-# Editor / OS
-.idea/
-.vscode/
-.claude/settings.local.json
+# IDE specific
 .DS_Store
 Thumbs.db
-
-# Local secrets
-.env
-.env.local
-
-# MLflow local store
-mlruns/
-mlartifacts/
-backend/mlruns/
-backend/mlartifacts/
-
-# Demo runner output (committed selectively)
-backend/outputs/*.json
-!backend/outputs/hour8_smoke.json
-!backend/outputs/.gitkeep
-
-# Generated / fallback fixtures
-backend/fixtures/seed_*.json
+```

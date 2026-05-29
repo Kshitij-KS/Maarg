@@ -1,0 +1,31 @@
+Metadata-Version: 2.4
+Name: hacknation-reasoning
+Version: 0.0.1
+Summary: MIT Hackathon C03 - Indian Healthcare Reasoning Auditor. Person B: Reasoning Layer (backend).
+Requires-Python: >=3.11
+Requires-Dist: pydantic>=2.7
+Requires-Dist: databricks-sql-connector
+Requires-Dist: fastapi
+Requires-Dist: uvicorn[standard]
+Requires-Dist: python-dotenv
+Requires-Dist: pyyaml
+Requires-Dist: httpx
+Requires-Dist: python-multipart
+Requires-Dist: Pillow>=10.0
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+Provides-Extra: supabase
+Requires-Dist: supabase>=2.0; extra == "supabase"
+Provides-Extra: data
+Requires-Dist: databricks-sdk; extra == "data"
+Requires-Dist: datamodel-code-generator; extra == "data"
+Requires-Dist: mlflow>=3.0; extra == "data"
+Requires-Dist: numpy; extra == "data"
+Requires-Dist: openpyxl; extra == "data"
+Requires-Dist: pandas; extra == "data"
+Requires-Dist: pyspark; extra == "data"
+Provides-Extra: tracing
+Requires-Dist: mlflow>=3.0; extra == "tracing"

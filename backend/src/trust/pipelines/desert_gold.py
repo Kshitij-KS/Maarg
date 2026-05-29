@@ -5,7 +5,6 @@ from typing import Any
 
 from src.shared.schemas import FacilityTrustRecord, PinCodeDesert
 
-
 DEFAULT_DESERT_CAPABILITIES = [
     "emergency_obstetric_care",
     "advanced_surgery",

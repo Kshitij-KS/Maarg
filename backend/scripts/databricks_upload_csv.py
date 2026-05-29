@@ -5,7 +5,6 @@ import csv
 import subprocess
 from pathlib import Path
 
-
 REQUIRED_COLUMNS = {
     "name",
     "address_city",

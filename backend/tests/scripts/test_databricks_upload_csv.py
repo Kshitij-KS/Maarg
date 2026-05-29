@@ -7,7 +7,6 @@ import pytest
 
 from scripts.databricks_upload_csv import upload_csv, validate_csv_header
 
-
 CSV_HEADERS = [
     "name",
     "address_city",

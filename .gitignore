@@ -1,1 +1,35 @@
-Nothing should be ignored since the changes only include source code files (.py) and no build artifacts, dependencies, or temporary files.
+```
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Dependencies
+.venv/
+venv/
+.env
+.env.local
+*.env.*
+
+# Logs
+*.log
+
+# Coverage
+.coverage
+htmlcov/
+coverage/
+
+# Databricks/Spark related
+*.jar
+*.parquet
+*.csv.tmp
+
+# JSON outputs
+**/outputs/*.json
+```

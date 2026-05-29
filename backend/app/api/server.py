@@ -23,7 +23,7 @@ from app.api.settings import get_settings
 from app.portal.api.router import portal_router
 from app.reasoning.tracing.mlflow_setup import set_trace_attributes, traced
 from app.shared.cache import get_cache_stats, warmup_cache
-from app.shared.catalog import load_facility_trust, load_pin_desert
+from app.shared.catalog import load_facility_trust, load_pin_desert, refresh_gold_cache
 
 logger = logging.getLogger(__name__)
 settings = get_settings()

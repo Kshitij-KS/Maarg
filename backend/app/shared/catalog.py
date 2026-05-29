@@ -133,14 +133,36 @@ def refresh_gold_cache() -> dict[str, int]:
     
     Call this after facility data updates to ensure fresh data.
     Returns count of facilities and desert records loaded.
+    
+    This function properly clears both:
+    1. The global cache used by @cached decorators
+    2. Any Redis cache if available
+    
+    This ensures that load_facility_trust() and load_pin_desert() 
+    will reload fresh data on next access.
     """
     LOGGER.info("Refreshing Gold data cache...")
     
-    # Invalidate existing caches
+    # Invalidate existing caches using the proper invalidation functions
+    # These clear both in-memory and Redis caches
     invalidate_facility_cache()
     invalidate_desert_cache()
     
-    # Warm up cache with fresh data
+    # Also explicitly invalidate the decorated functions' cache entries
+    # This handles the case where decorators closed over specific cache instances
+    try:
+        load_facility_trust.invalidate()
+        LOGGER.debug("Invalidated facility trust decorator cache")
+    except Exception as e:
+        LOGGER.warning("Failed to invalidate facility cache: %s", e)
+    
+    try:
+        load_pin_desert.invalidate()
+        LOGGER.debug("Invalidated pin desert decorator cache")
+    except Exception as e:
+        LOGGER.warning("Failed to invalidate desert cache: %s", e)
+    
+    # Warm up cache with fresh data (this repopulates the cache)
     facilities = load_facility_trust()
     deserts = load_pin_desert()
     

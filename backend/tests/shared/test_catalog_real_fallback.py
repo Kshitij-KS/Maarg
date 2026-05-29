@@ -28,6 +28,9 @@ def test_real_mode_loads_facility_trust_from_databricks(monkeypatch) -> None:
 
     monkeypatch.setenv("HACKATHON_MODE", "real")
     monkeypatch.setattr(catalog, "DatabricksGoldCatalog", FakeDatabricksGoldCatalog)
+    
+    # Invalidate cache to ensure fresh load with new mode
+    catalog.invalidate_facility_cache()
 
     records = catalog.load_facility_trust()
 
@@ -42,8 +45,11 @@ def test_real_mode_falls_back_to_mock_when_databricks_fails(monkeypatch) -> None
 
     monkeypatch.setenv("HACKATHON_MODE", "real")
     monkeypatch.setattr(catalog, "DatabricksGoldCatalog", FailingDatabricksGoldCatalog)
+    
+    # Invalidate cache to ensure fresh load with new mode
+    catalog.invalidate_facility_cache()
 
     records = catalog.load_facility_trust()
 
     assert records
-    assert records[0].facility_id != "real-1"
+    assert records[0].facility_id.startswith("F")  # Mock facility IDs start with F

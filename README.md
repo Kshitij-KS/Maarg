@@ -8,7 +8,6 @@
 | **Team ID** | `HN-9492` |
 | **Deployment record** | April 26, 2026 |
 | **Team** | **Ujjawal Anand** (contributor) · **Kshitij Singh** (contributor) |
-| **Lead author (dossier)** | Ujjawal Anand · B.Tech CSE · Kalinga Institute of Industrial Technology (KIIT) · ML and backend focus |
 
 ---
 
